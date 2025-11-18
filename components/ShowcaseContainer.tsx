@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { ClipboardIcon, ClipboardDocumentCheckIcon, CodeIcon, EyeIcon } from './Icons';
 
 interface ShowcaseContainerProps {
     title: string;
@@ -37,51 +38,93 @@ export const TechnicalOverview: React.FC<{
     features: string[];
     installation: string;
     usage: string;
-}> = ({ library, officialName, githubUrl, description, features, installation, usage }) => (
-    <ShowcaseContainer title="Technical Overview">
-        <div className="space-y-6 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 p-6 transition-colors">
-            <div>
-                 <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
-                    <h3 className="text-lg font-medium text-slate-900 dark:text-slate-200 transition-colors">{library}</h3>
-                    <a 
-                        href={githubUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-400 transition-colors bg-white dark:bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
+}> = ({ library, officialName, githubUrl, description, features, installation, usage }) => {
+    const [copiedInstall, setCopiedInstall] = useState(false);
+    const [copiedUsage, setCopiedUsage] = useState(false);
+    const [showRaw, setShowRaw] = useState(false);
+
+    const handleCopy = (text: string, setCopied: (val: boolean) => void) => {
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <ShowcaseContainer title="Technical Overview">
+            <div className="space-y-6 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 p-6 transition-colors">
+                <div className="flex justify-between items-start">
+                    <div>
+                        <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+                            <h3 className="text-lg font-medium text-slate-900 dark:text-slate-200 transition-colors">{library}</h3>
+                            <a 
+                                href={githubUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-400 transition-colors bg-white dark:bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
+                            >
+                                <svg viewBox="0 0 16 16" fill="currentColor" height="16" width="16" className="w-4 h-4 flex-shrink-0"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.19.01-.82.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21-.15.46-.55.38A8.013 8.013 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
+                                <span>{officialName}</span>
+                            </a>
+                        </div>
+                        <p className="text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">{description}</p>
+                    </div>
+                    
+                    <button 
+                        onClick={() => setShowRaw(!showRaw)}
+                        className="hidden sm:flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-sky-600 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors"
                     >
-                        <svg viewBox="0 0 16 16" fill="currentColor" height="16" width="16" className="w-4 h-4 flex-shrink-0"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.19.01-.82.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21-.15.46-.55.38A8.013 8.013 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
-                        <span>{officialName}</span>
-                    </a>
+                        {showRaw ? <EyeIcon className="w-4 h-4" /> : <CodeIcon className="w-4 h-4" />}
+                        <span>{showRaw ? 'Preview' : 'Source'}</span>
+                    </button>
                 </div>
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">{description}</p>
-            </div>
-            <div>
-                <h4 className="font-medium text-slate-900 dark:text-slate-200 mb-2 transition-colors">Core Features</h4>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {features.map((feature, index) => (
-                        <li key={index} className="flex items-start text-sm text-slate-600 dark:text-slate-400 transition-colors">
-                            <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-sky-500 rounded-full flex-shrink-0"></span>
-                            {feature}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
                 <div>
-                    <h4 className="font-medium text-slate-900 dark:text-slate-200 mb-2 transition-colors">Installation</h4>
-                    <pre className="p-4 bg-white dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800 text-sm text-sky-700 dark:text-cyan-400 overflow-x-auto font-mono transition-colors">
-                        <code>{installation}</code>
-                    </pre>
+                    <h4 className="font-medium text-slate-900 dark:text-slate-200 mb-2 transition-colors">Core Features</h4>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {features.map((feature, index) => (
+                            <li key={index} className="flex items-start text-sm text-slate-600 dark:text-slate-400 transition-colors">
+                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-sky-500 rounded-full flex-shrink-0"></span>
+                                {feature}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
-                <div>
-                    <h4 className="font-medium text-slate-900 dark:text-slate-200 mb-2 transition-colors">Basic Usage</h4>
-                    <pre className="p-4 bg-white dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800 text-sm text-sky-700 dark:text-cyan-400 overflow-x-auto font-mono transition-colors">
-                        <code>{usage}</code>
-                    </pre>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <div className="flex justify-between items-center mb-2">
+                             <h4 className="font-medium text-slate-900 dark:text-slate-200 transition-colors">Installation</h4>
+                             <button 
+                                onClick={() => handleCopy(installation, setCopiedInstall)}
+                                className="text-xs text-slate-500 hover:text-sky-600 transition-colors flex items-center"
+                             >
+                                {copiedInstall ? <ClipboardDocumentCheckIcon className="w-4 h-4 mr-1 text-green-500" /> : <ClipboardIcon className="w-4 h-4 mr-1" />}
+                                {copiedInstall ? 'Copied!' : 'Copy'}
+                             </button>
+                        </div>
+                        <pre className="relative group p-4 bg-white dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800 text-sm text-sky-700 dark:text-cyan-400 overflow-x-auto font-mono transition-colors">
+                            <code>{installation}</code>
+                        </pre>
+                    </div>
+                    <div>
+                        <div className="flex justify-between items-center mb-2">
+                            <h4 className="font-medium text-slate-900 dark:text-slate-200 transition-colors">Basic Usage</h4>
+                             <button 
+                                onClick={() => handleCopy(usage, setCopiedUsage)}
+                                className="text-xs text-slate-500 hover:text-sky-600 transition-colors flex items-center"
+                             >
+                                {copiedUsage ? <ClipboardDocumentCheckIcon className="w-4 h-4 mr-1 text-green-500" /> : <ClipboardIcon className="w-4 h-4 mr-1" />}
+                                {copiedUsage ? 'Copied!' : 'Copy'}
+                             </button>
+                        </div>
+                        <pre className={`p-4 bg-white dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800 text-sm text-sky-700 dark:text-cyan-400 overflow-x-auto font-mono transition-colors ${showRaw ? 'h-96' : ''}`}>
+                            <code>{usage}</code>
+                        </pre>
+                    </div>
                 </div>
             </div>
-        </div>
-    </ShowcaseContainer>
-);
+        </ShowcaseContainer>
+    );
+};
 
 export default ShowcaseContainer;

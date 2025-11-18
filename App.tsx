@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import type { Showcase } from './types';
 import Sidebar from './components/Sidebar';
 import { 
@@ -13,8 +13,11 @@ import {
     EllipsisHorizontalCircleIcon, Bars3BottomLeftIcon, ChatBubbleOvalLeftIcon, CompareIcon, RocketLaunchIcon,
     AtSymbolIcon, CommandLineIcon, ArrowPathRoundedSquareIcon, PresentationChartLineIcon,
     RectangleGroupIcon, CodeBracketIcon, CalculatorIcon, QrCodeIcon, HandRaisedIcon, FingerPrintIcon, FaceSmileIcon,
-    EyeIcon, ShareIcon, CpuChipIcon, DocumentIcon
+    EyeIcon, ShareIcon, CpuChipIcon, DocumentIcon, ChevronRightIcon, ChevronLeftIcon,
+    ExpandIcon, ContractIcon, StarFilledIcon, MagnifyingGlassIcon
 } from './components/Icons';
+
+// Component Imports
 import MonacoEditorDemo from './components/MonacoEditorDemo';
 import ToastDemo from './components/ToastDemo';
 import TreeViewDemo from './components/TreeViewDemo';
@@ -90,26 +93,40 @@ import PdfViewerDemo from './components/PdfViewerDemo';
 
 
 const App: React.FC = () => {
+    // --- State Management ---
+    
+    // Theme
     const [isDarkMode, setIsDarkMode] = useState(() => {
         if (typeof window !== 'undefined') {
-             return document.documentElement.classList.contains('dark');
+             return localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
         }
         return true;
     });
 
-    useEffect(() => {
-        const root = document.documentElement;
-        if (isDarkMode) {
-            root.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            root.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        }
-    }, [isDarkMode]);
+    // Layout
+    const [isCompact, setIsCompact] = useState(() => localStorage.getItem('sidebar_compact') === 'true');
+    const [zenMode, setZenMode] = useState(false);
+    const [isRTL, setIsRTL] = useState(false);
+    const [fontSize, setFontSize] = useState(16);
 
-    const toggleTheme = () => setIsDarkMode(!isDarkMode);
+    // Navigation & Content
+    const [activeShowcaseId, setActiveShowcaseId] = useState('controls'); // Default fallback
+    const [favorites, setFavorites] = useState<Set<string>>(() => {
+        const saved = localStorage.getItem('favorites');
+        return saved ? new Set(JSON.parse(saved)) : new Set();
+    });
+    const [recents, setRecents] = useState<string[]>(() => {
+        const saved = localStorage.getItem('recents');
+        return saved ? JSON.parse(saved) : [];
+    });
+    const [primaryColor, setPrimaryColor] = useState('#0ea5e9'); // Sky-500
 
+    // Command Palette
+    const [showCmdPalette, setShowCmdPalette] = useState(false);
+    const [cmdQuery, setCmdQuery] = useState('');
+
+    // --- Data Definition ---
+    
     const showcases: Showcase[] = useMemo(() => [
         // Inputs
         { id: 'controls', name: 'Controls', icon: <AdjustmentsHorizontalIcon className="w-5 h-5" />, component: <ControlsDemo />, category: 'Inputs' },
@@ -198,35 +215,265 @@ const App: React.FC = () => {
         { id: 'media', name: 'Media Player', icon: <PlayCircleIcon className="w-5 h-5" />, component: <MediaPlayerDemo />, category: 'Media' },
     ], []);
 
-    const [activeShowcaseId, setActiveShowcaseId] = useState<string>(showcases[0].id);
+    // --- Effects & Logic ---
 
+    // 1. Sync Theme
+    useEffect(() => {
+        const root = document.documentElement;
+        if (isDarkMode) {
+            root.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            root.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [isDarkMode]);
+
+    // 2. URL Routing (Deep Linking)
+    useEffect(() => {
+        const hash = window.location.hash.replace('#', '');
+        if (hash) {
+            const found = showcases.find(s => s.id === hash);
+            if (found) setActiveShowcaseId(found.id);
+        }
+    }, [showcases]);
+
+    const updateActiveShowcase = (id: string) => {
+        setActiveShowcaseId(id);
+        window.location.hash = id;
+        
+        // Update Recents
+        setRecents(prev => {
+            const filtered = prev.filter(i => i !== id);
+            const newRecents = [id, ...filtered].slice(0, 10);
+            localStorage.setItem('recents', JSON.stringify(newRecents));
+            return newRecents;
+        });
+    };
+
+    // 3. Keyboard Shortcuts (Global Command Palette)
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === '/') {
+                e.preventDefault();
+                setShowCmdPalette(prev => !prev);
+            }
+            if (e.key === 'Escape') {
+                setShowCmdPalette(false);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
+    // --- Actions ---
+
+    const toggleTheme = () => setIsDarkMode(!isDarkMode);
+    const toggleCompact = () => {
+        const newVal = !isCompact;
+        setIsCompact(newVal);
+        localStorage.setItem('sidebar_compact', String(newVal));
+    };
+    const toggleFavorite = (id: string) => {
+        const newFavs = new Set(favorites);
+        if (newFavs.has(id)) newFavs.delete(id);
+        else newFavs.add(id);
+        setFavorites(newFavs);
+        localStorage.setItem('favorites', JSON.stringify(Array.from(newFavs)));
+    };
+    
+    const resetSettings = () => {
+        if (confirm("Reset all settings (theme, favorites, history)?")) {
+            localStorage.clear();
+            window.location.reload();
+        }
+    };
+    
+    const navigateShowcase = (direction: 'prev' | 'next') => {
+        const idx = showcases.findIndex(s => s.id === activeShowcaseId);
+        if (idx === -1) return;
+        
+        let newIdx = direction === 'next' ? idx + 1 : idx - 1;
+        // Wrap around
+        if (newIdx >= showcases.length) newIdx = 0;
+        if (newIdx < 0) newIdx = showcases.length - 1;
+        
+        updateActiveShowcase(showcases[newIdx].id);
+    };
+
+    // --- Derived State ---
     const activeShowcase = useMemo(() => showcases.find(s => s.id === activeShowcaseId) || showcases[0], [activeShowcaseId, showcases]);
+    
+    const activeIndex = showcases.findIndex(s => s.id === activeShowcaseId);
+    const prevShowcase = activeIndex > 0 ? showcases[activeIndex - 1] : null;
+    const nextShowcase = activeIndex < showcases.length - 1 ? showcases[activeIndex + 1] : null;
+
+    const filteredCommands = showcases.filter(s => s.name.toLowerCase().includes(cmdQuery.toLowerCase()));
 
     return (
-        <div className="flex h-screen bg-slate-50 dark:bg-slate-950 font-sans transition-colors duration-300 text-slate-900 dark:text-slate-300">
-            <Sidebar 
-                showcases={showcases} 
-                activeShowcaseId={activeShowcaseId} 
-                setActiveShowcaseId={setActiveShowcaseId} 
-                isDarkMode={isDarkMode}
-                toggleTheme={toggleTheme}
-            />
-            <main className="flex-1 overflow-y-auto p-6 lg:p-10 scroll-smooth">
-                <div className="max-w-5xl mx-auto">
-                    <div className="flex items-center space-x-4 mb-8 pb-6 border-b border-slate-200 dark:border-slate-800 transition-colors">
-                        <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-sky-600 dark:text-sky-500 shadow-sm transition-colors">
-                             {activeShowcase?.icon}
-                        </div>
-                        <div>
-                            <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight transition-colors">{activeShowcase?.name}</h1>
-                            <p className="text-slate-500 text-sm mt-1">{activeShowcase?.category}</p>
-                        </div>
+        <div className={`flex h-screen bg-slate-50 dark:bg-slate-950 font-sans transition-colors duration-300 text-slate-900 dark:text-slate-300 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`} dir={isRTL ? 'rtl' : 'ltr'} style={{ fontSize: `${fontSize}px` }}>
+            
+            {/* Sidebar (Hidden in Zen Mode) */}
+            {!zenMode && (
+                <Sidebar 
+                    showcases={showcases} 
+                    activeShowcaseId={activeShowcaseId} 
+                    setActiveShowcaseId={updateActiveShowcase} 
+                    isDarkMode={isDarkMode}
+                    toggleTheme={toggleTheme}
+                    favorites={favorites}
+                    toggleFavorite={toggleFavorite}
+                    recents={recents}
+                    isCompact={isCompact}
+                    toggleCompact={toggleCompact}
+                    primaryColor={primaryColor}
+                    setPrimaryColor={setPrimaryColor}
+                    resetSettings={resetSettings}
+                />
+            )}
+
+            {/* Main Content */}
+            <main className="flex-1 overflow-y-auto relative scroll-smooth">
+                 {/* Header Bar */}
+                <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 py-3 flex items-center justify-between transition-colors">
+                    <div className="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
+                         <button onClick={() => setZenMode(!zenMode)} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors" title="Toggle Zen Mode">
+                            {zenMode ? <ContractIcon className="w-4 h-4" /> : <ExpandIcon className="w-4 h-4" />}
+                         </button>
+                         {/* Breadcrumbs */}
+                         <span className="hidden sm:inline text-slate-300 dark:text-slate-600">/</span>
+                         <span className="hidden sm:inline">{activeShowcase?.category}</span>
+                         <span className="text-slate-300 dark:text-slate-600">/</span>
+                         <span className="font-medium text-slate-900 dark:text-slate-200">{activeShowcase?.name}</span>
                     </div>
-                    <div className="animate-fade-in">
+
+                    <div className="flex items-center space-x-2">
+                         <button onClick={() => setShowCmdPalette(true)} className="hidden md:flex items-center px-2 py-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded text-xs text-slate-500 dark:text-slate-400 hover:border-sky-500 transition-colors">
+                             <span className="mr-2">Search</span>
+                             <kbd className="font-mono bg-white dark:bg-slate-800 px-1 rounded border border-slate-300 dark:border-slate-700">⌘ /</kbd>
+                         </button>
+                         
+                         <div className="w-px h-4 bg-slate-300 dark:bg-slate-700 mx-2 hidden sm:block"></div>
+
+                         {/* Font Size & RTL Toggles (Quick Settings) */}
+                         <button onClick={() => setFontSize(s => s === 16 ? 18 : (s === 18 ? 14 : 16))} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-slate-500" title="Toggle Font Size">
+                             <span className="font-serif font-bold">A</span>
+                         </button>
+                         <button onClick={() => setIsRTL(r => !r)} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-slate-500 text-xs font-bold" title="Toggle RTL">
+                             {isRTL ? 'LTR' : 'RTL'}
+                         </button>
+                    </div>
+                </div>
+
+                <div className="p-6 lg:p-10 max-w-5xl mx-auto min-h-[calc(100vh-64px)] flex flex-col">
+                    <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-200 dark:border-slate-800 transition-colors">
+                        <div className="flex items-center space-x-4">
+                            <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors" style={{ color: primaryColor }}>
+                                {activeShowcase?.icon}
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight transition-colors">{activeShowcase?.name}</h1>
+                                    {/* Mock Status Badge */}
+                                    {['kanban', 'calendar', 'dock'].includes(activeShowcaseId) && (
+                                        <span className="px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-xs font-bold rounded-full uppercase tracking-wide border border-purple-200 dark:border-purple-800">New</span>
+                                    )}
+                                </div>
+                                <p className="text-slate-500 text-sm mt-1">{activeShowcase?.category} Component</p>
+                            </div>
+                        </div>
+                        <button 
+                            onClick={() => toggleFavorite(activeShowcaseId)}
+                            className={`p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors ${favorites.has(activeShowcaseId) ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600'}`}
+                        >
+                            {favorites.has(activeShowcaseId) ? <StarFilledIcon className="w-6 h-6" /> : <StarIcon className="w-6 h-6" />}
+                        </button>
+                    </div>
+                    
+                    <div className="animate-fade-in flex-1">
                         {activeShowcase?.component}
+                    </div>
+
+                    {/* Navigation Footer */}
+                    <div className="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                        {prevShowcase ? (
+                            <button 
+                                onClick={() => updateActiveShowcase(prevShowcase.id)}
+                                className="flex items-center group"
+                            >
+                                <div className="p-2 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 group-hover:border-sky-500 group-hover:text-sky-500 transition-colors mr-3">
+                                    <ChevronLeftIcon className="w-4 h-4" />
+                                </div>
+                                <div className="text-left">
+                                    <div className="text-xs text-slate-500 uppercase">Previous</div>
+                                    <div className="text-sm font-medium text-slate-900 dark:text-slate-200 group-hover:text-sky-500">{prevShowcase.name}</div>
+                                </div>
+                            </button>
+                        ) : <div></div>}
+
+                        {nextShowcase ? (
+                            <button 
+                                onClick={() => updateActiveShowcase(nextShowcase.id)}
+                                className="flex items-center group"
+                            >
+                                <div className="text-right">
+                                    <div className="text-xs text-slate-500 uppercase">Next</div>
+                                    <div className="text-sm font-medium text-slate-900 dark:text-slate-200 group-hover:text-sky-500">{nextShowcase.name}</div>
+                                </div>
+                                <div className="p-2 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 group-hover:border-sky-500 group-hover:text-sky-500 transition-colors ml-3">
+                                    <ChevronRightIcon className="w-4 h-4" />
+                                </div>
+                            </button>
+                        ) : <div></div>}
                     </div>
                 </div>
             </main>
+            
+            {/* Global Command Palette Overlay */}
+            {showCmdPalette && (
+                <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] px-4" style={{ fontSize: '16px' }}>
+                    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowCmdPalette(false)}></div>
+                    <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-fade-in-up">
+                        <div className="flex items-center px-4 py-3 border-b border-slate-200 dark:border-slate-800">
+                             <MagnifyingGlassIcon className="w-5 h-5 text-slate-400 mr-3" />
+                             <input 
+                                autoFocus
+                                type="text" 
+                                placeholder="Go to component..." 
+                                value={cmdQuery}
+                                onChange={e => setCmdQuery(e.target.value)}
+                                className="flex-1 bg-transparent outline-none text-slate-900 dark:text-slate-100 placeholder-slate-500"
+                             />
+                             <span className="text-xs bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-1 rounded text-slate-500">ESC</span>
+                        </div>
+                        <div className="max-h-[60vh] overflow-y-auto py-2">
+                             {filteredCommands.length > 0 ? (
+                                 filteredCommands.map(s => (
+                                     <button 
+                                        key={s.id}
+                                        onClick={() => {
+                                            updateActiveShowcase(s.id);
+                                            setShowCmdPalette(false);
+                                            setCmdQuery('');
+                                        }}
+                                        className="w-full text-left px-4 py-3 flex items-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group"
+                                     >
+                                         <span className="text-slate-400 group-hover:text-sky-500 mr-3">{s.icon}</span>
+                                         <div>
+                                             <div className="text-sm font-medium text-slate-900 dark:text-slate-100">{s.name}</div>
+                                             <div className="text-xs text-slate-500">{s.category}</div>
+                                         </div>
+                                         {favorites.has(s.id) && <StarFilledIcon className="w-4 h-4 text-amber-400 ml-auto" />}
+                                     </button>
+                                 ))
+                             ) : (
+                                 <div className="p-4 text-center text-slate-500 text-sm">No components found.</div>
+                             )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <style>{`
                 @keyframes fadeIn {
                     from { opacity: 0; transform: translateY(10px); }
@@ -234,6 +481,29 @@ const App: React.FC = () => {
                 }
                 .animate-fade-in {
                     animation: fadeIn 0.3s ease-out forwards;
+                }
+                .animate-fade-in-up {
+                    animation: fadeIn 0.2s ease-out forwards;
+                }
+                 /* Custom Scrollbar */
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 4px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #cbd5e1;
+                    border-radius: 4px;
+                }
+                .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #334155;
+                }
+                .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+                    background: #94a3b8;
+                }
+                .dark .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+                    background: #475569;
                 }
             `}</style>
         </div>

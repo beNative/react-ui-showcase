@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 import { generateCode } from '../services/geminiService';
-import { GeminiIcon } from './Icons';
+import { GeminiIcon, TrashIcon } from './Icons';
 
 // Minimal Monaco Editor types to avoid full dependency
 declare const monaco: any;
@@ -10,12 +10,25 @@ declare const monaco: any;
 const MonacoEditorDemo: React.FC = () => {
     const editorRef = useRef<HTMLDivElement>(null);
     const monacoInstanceRef = useRef<any>(null);
-    const [code, setCode] = useState<string>('function helloWorld() {\n  console.log("Hello, world!");\n}');
+    
+    // Initialize from localStorage or default
+    const [code, setCode] = useState<string>(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('monaco_demo_code') || 'function helloWorld() {\n  console.log("Hello, world!");\n}';
+        }
+        return 'function helloWorld() {\n  console.log("Hello, world!");\n}';
+    });
+
     const [language, setLanguage] = useState<string>('javascript');
     const [theme, setTheme] = useState<'vs-dark' | 'vs-light'>('vs-dark');
     const [showMinimap, setShowMinimap] = useState(false);
     const [geminiPrompt, setGeminiPrompt] = useState<string>('a React component for a login form');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    // Auto-save to localStorage
+    useEffect(() => {
+        localStorage.setItem('monaco_demo_code', code);
+    }, [code]);
 
     const loadMonaco = useCallback(() => {
         if ((window as any).monaco) {
@@ -37,7 +50,7 @@ const MonacoEditorDemo: React.FC = () => {
     const initializeMonaco = () => {
         if (editorRef.current && !monacoInstanceRef.current) {
             monacoInstanceRef.current = monaco.editor.create(editorRef.current, {
-                value: code,
+                value: code, // Use current state (which might be from localStorage)
                 language: language,
                 theme: theme,
                 automaticLayout: true,
@@ -78,6 +91,15 @@ const MonacoEditorDemo: React.FC = () => {
         setIsLoading(false);
     };
 
+    const handleClear = () => {
+        const emptyCode = '';
+        setCode(emptyCode);
+        if (monacoInstanceRef.current) {
+            monacoInstanceRef.current.setValue(emptyCode);
+        }
+        localStorage.removeItem('monaco_demo_code');
+    };
+
     return (
         <div>
             <LivePreview>
@@ -110,15 +132,26 @@ const MonacoEditorDemo: React.FC = () => {
                                 </select>
                             </div>
                         </div>
-                         <label className="flex items-center space-x-2 cursor-pointer">
-                            <input 
-                                type="checkbox" 
-                                checked={showMinimap} 
-                                onChange={(e) => setShowMinimap(e.target.checked)}
-                                className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
-                            />
-                            <span className="text-sm text-slate-600 dark:text-slate-400">Minimap</span>
-                        </label>
+                        
+                        <div className="flex items-center gap-4">
+                             <label className="flex items-center space-x-2 cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    checked={showMinimap} 
+                                    onChange={(e) => setShowMinimap(e.target.checked)}
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
+                                />
+                                <span className="text-sm text-slate-600 dark:text-slate-400">Minimap</span>
+                            </label>
+                            <button
+                                onClick={handleClear}
+                                className="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center"
+                                title="Clear content"
+                            >
+                                <TrashIcon className="w-3.5 h-3.5 mr-1.5" />
+                                Clear
+                            </button>
+                        </div>
                     </div>
 
                     <div className="h-96 w-full rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm" ref={editorRef} />
