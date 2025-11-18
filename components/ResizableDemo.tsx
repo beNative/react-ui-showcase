@@ -1,10 +1,12 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
-import { ArrowsPointingOutIcon } from './Icons';
+import { ArrowsPointingOutIcon, AdjustmentsHorizontalIcon } from './Icons';
 
 const ResizableDemo: React.FC = () => {
-    const [width, setWidth] = useState(50); // Percentage
+    const [dimension, setDimension] = useState(50); // Percentage
     const [isDragging, setIsDragging] = useState(false);
+    const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>('horizontal');
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -12,10 +14,16 @@ const ResizableDemo: React.FC = () => {
             if (!isDragging || !containerRef.current) return;
             
             const containerRect = containerRef.current.getBoundingClientRect();
-            const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+            let newDim = 0;
+
+            if (orientation === 'horizontal') {
+                 newDim = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+            } else {
+                 newDim = ((e.clientY - containerRect.top) / containerRect.height) * 100;
+            }
             
             // Constrain between 20% and 80%
-            setWidth(Math.min(Math.max(newWidth, 20), 80));
+            setDimension(Math.min(Math.max(newDim, 20), 80));
         };
 
         const handleMouseUp = () => {
@@ -27,7 +35,7 @@ const ResizableDemo: React.FC = () => {
         if (isDragging) {
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('mouseup', handleMouseUp);
-            document.body.style.cursor = 'col-resize';
+            document.body.style.cursor = orientation === 'horizontal' ? 'col-resize' : 'row-resize';
             document.body.style.userSelect = 'none';
         }
 
@@ -35,40 +43,67 @@ const ResizableDemo: React.FC = () => {
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
         };
-    }, [isDragging]);
+    }, [isDragging, orientation]);
 
     return (
         <div>
             <LivePreview>
-                <div className="w-full h-64 rounded-xl border border-slate-800 bg-slate-950 overflow-hidden flex flex-col justify-center p-4">
-                    <div ref={containerRef} className="flex w-full h-full border border-slate-700 rounded-lg overflow-hidden relative">
-                        {/* Left Panel */}
-                        <div style={{ width: `${width}%` }} className="bg-slate-900/50 p-4 flex items-center justify-center min-w-[20%]">
-                            <div className="text-center">
-                                <span className="font-semibold text-slate-300">Panel A</span>
-                                <p className="text-xs text-slate-500 mt-1">{Math.round(width)}%</p>
+                <div className="flex flex-col gap-6">
+                    <div className="w-full h-80 rounded-xl border border-slate-800 bg-slate-950 overflow-hidden flex flex-col justify-center p-4 shadow-xl">
+                        <div ref={containerRef} className={`flex ${orientation === 'horizontal' ? 'flex-row' : 'flex-col'} w-full h-full border border-slate-700 rounded-lg overflow-hidden relative bg-slate-900`}>
+                            {/* First Panel */}
+                            <div 
+                                style={{ [orientation === 'horizontal' ? 'width' : 'height']: `${dimension}%` }} 
+                                className="bg-slate-800/50 p-4 flex items-center justify-center min-w-[20%] min-h-[20%] transition-colors"
+                            >
+                                <div className="text-center">
+                                    <span className="font-semibold text-slate-300">Panel A</span>
+                                    <p className="text-xs text-slate-500 mt-1">{Math.round(dimension)}%</p>
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Handle */}
-                        <div
-                            className={`w-1 hover:w-1.5 bg-slate-700 hover:bg-sky-500 cursor-col-resize transition-all z-10 flex items-center justify-center group relative -ml-0.5`}
-                            onMouseDown={() => setIsDragging(true)}
-                        >
-                            <div className="h-8 w-1 rounded-full bg-slate-500 group-hover:bg-white transition-colors"></div>
-                        </div>
+                            {/* Handle */}
+                            <div
+                                className={`
+                                    ${orientation === 'horizontal' ? 'w-1 cursor-col-resize hover:w-1.5 -ml-0.5' : 'h-1 cursor-row-resize hover:h-1.5 -mt-0.5'}
+                                    bg-slate-700 hover:bg-sky-500 transition-all z-10 flex items-center justify-center group relative
+                                `}
+                                onMouseDown={() => setIsDragging(true)}
+                            >
+                                <div className={`${orientation === 'horizontal' ? 'h-8 w-1' : 'w-8 h-1'} rounded-full bg-slate-500 group-hover:bg-white transition-colors`}></div>
+                            </div>
 
-                        {/* Right Panel */}
-                        <div style={{ width: `${100 - width}%` }} className="bg-slate-800/50 p-4 flex items-center justify-center flex-1 min-w-[20%]">
-                            <div className="text-center">
-                                <span className="font-semibold text-slate-300">Panel B</span>
-                                <p className="text-xs text-slate-500 mt-1">{Math.round(100 - width)}%</p>
+                            {/* Second Panel */}
+                            <div className="flex-1 bg-slate-900/50 p-4 flex items-center justify-center min-w-[20%] min-h-[20%]">
+                                <div className="text-center">
+                                    <span className="font-semibold text-slate-300">Panel B</span>
+                                    <p className="text-xs text-slate-500 mt-1">{Math.round(100 - dimension)}%</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="mt-4 text-center text-sm text-slate-500 flex items-center justify-center gap-2">
-                        <ArrowsPointingOutIcon className="w-4 h-4"/>
-                        Drag the center bar to resize panels
+
+                     {/* Configuration */}
+                     <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 flex justify-between items-center">
+                        <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
+                            <ArrowsPointingOutIcon className="w-4 h-4 mr-2"/>
+                            <span>Drag the handle to resize</span>
+                        </div>
+                        
+                        <div className="flex bg-white dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
+                             <button
+                                onClick={() => setOrientation('horizontal')}
+                                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${orientation === 'horizontal' ? 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
+                            >
+                                Horizontal
+                            </button>
+                            <button
+                                onClick={() => setOrientation('vertical')}
+                                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${orientation === 'vertical' ? 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
+                            >
+                                Vertical
+                            </button>
+                        </div>
                     </div>
                 </div>
             </LivePreview>

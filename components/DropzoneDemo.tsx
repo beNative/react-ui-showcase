@@ -1,11 +1,18 @@
 
 import React, { useState, useRef } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
-import { CloudArrowUpIcon, DocumentTextIcon, CloseIcon } from './Icons';
+import { CloudArrowUpIcon, DocumentTextIcon, CloseIcon, CheckIcon } from './Icons';
+
+interface FileItem {
+    id: string;
+    file: File;
+    progress: number;
+    status: 'pending' | 'uploading' | 'completed' | 'error';
+}
 
 const DropzoneDemo: React.FC = () => {
     const [dragActive, setDragActive] = useState(false);
-    const [files, setFiles] = useState<File[]>([]);
+    const [fileItems, setFileItems] = useState<FileItem[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleDrag = (e: React.DragEvent) => {
@@ -23,41 +30,75 @@ const DropzoneDemo: React.FC = () => {
         e.stopPropagation();
         setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            handleFiles(Array.from(e.dataTransfer.files));
+            addFiles(Array.from(e.dataTransfer.files));
         }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         if (e.target.files && e.target.files[0]) {
-            handleFiles(Array.from(e.target.files));
+            addFiles(Array.from(e.target.files));
         }
     };
 
-    const handleFiles = (newFiles: File[]) => {
-        setFiles(prev => [...prev, ...newFiles]);
+    const addFiles = (files: File[]) => {
+        const newItems: FileItem[] = files.map(f => ({
+            id: Math.random().toString(36).substring(7),
+            file: f,
+            progress: 0,
+            status: 'pending'
+        }));
+        setFileItems(prev => [...prev, ...newItems]);
     };
 
-    const removeFile = (idx: number) => {
-        setFiles(prev => prev.filter((_, i) => i !== idx));
+    const removeFile = (id: string) => {
+        setFileItems(prev => prev.filter(item => item.id !== id));
     };
 
     const onButtonClick = () => {
         inputRef.current?.click();
     };
 
+    const simulateUpload = () => {
+        setFileItems(prev => prev.map(item => ({ ...item, status: 'uploading', progress: 0 })));
+        
+        const interval = setInterval(() => {
+            setFileItems(prev => {
+                let allComplete = true;
+                const nextState = prev.map(item => {
+                    if (item.status !== 'uploading') return item;
+                    
+                    // Random increment
+                    const increment = Math.random() * 15;
+                    const newProgress = Math.min(item.progress + increment, 100);
+                    
+                    if (newProgress < 100) {
+                        allComplete = false;
+                        return { ...item, progress: newProgress };
+                    } else {
+                        return { ...item, progress: 100, status: 'completed' as const };
+                    }
+                });
+
+                if (allComplete) clearInterval(interval);
+                return nextState;
+            });
+        }, 200);
+    };
+
     return (
         <div>
             <LivePreview>
-                <div className="w-full max-w-md mx-auto space-y-4">
+                <div className="w-full max-w-md mx-auto space-y-6">
                     <div
-                        className={`relative h-48 rounded-xl border-2 border-dashed transition-all duration-200 flex flex-col items-center justify-center text-center p-4 ${
-                            dragActive ? 'border-sky-500 bg-sky-500/10' : 'border-slate-700 bg-slate-900/50 hover:border-slate-600'
+                        className={`relative h-48 rounded-xl border-2 border-dashed transition-all duration-200 flex flex-col items-center justify-center text-center p-4 cursor-pointer group ${
+                            dragActive ? 'border-sky-500 bg-sky-50 dark:bg-sky-900/20' : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-sky-400 dark:hover:border-slate-600'
                         }`}
                         onDragEnter={handleDrag}
                         onDragLeave={handleDrag}
                         onDragOver={handleDrag}
                         onDrop={handleDrop}
+                        onClick={onButtonClick}
                     >
                         <input
                             ref={inputRef}
@@ -66,37 +107,56 @@ const DropzoneDemo: React.FC = () => {
                             multiple
                             onChange={handleChange}
                         />
-                        <CloudArrowUpIcon className={`w-12 h-12 mb-3 ${dragActive ? 'text-sky-500' : 'text-slate-500'}`} />
-                        <p className="text-sm text-slate-300 font-medium">
-                            Drag & Drop files here
+                        <div className={`p-4 rounded-full mb-3 transition-colors ${dragActive ? 'bg-sky-100 text-sky-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:text-sky-500 group-hover:bg-sky-50 dark:group-hover:bg-slate-700'}`}>
+                             <CloudArrowUpIcon className="w-8 h-8" />
+                        </div>
+                        <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">
+                            <span className="text-sky-500 hover:underline">Click to upload</span> or drag and drop
                         </p>
-                        <p className="text-xs text-slate-500 mt-1 mb-4">
-                            or click to browse from your computer
+                        <p className="text-xs text-slate-500 mt-1">
+                            SVG, PNG, JPG or GIF (max. 10MB)
                         </p>
-                        <button
-                            onClick={onButtonClick}
-                            className="px-4 py-1.5 bg-slate-800 border border-slate-700 rounded-md text-xs font-semibold text-slate-300 hover:bg-slate-700 transition-colors"
-                        >
-                            Browse Files
-                        </button>
                     </div>
 
-                    {files.length > 0 && (
-                        <div className="space-y-2">
-                            {files.map((file, idx) => (
-                                <div key={idx} className="flex items-center justify-between p-2 bg-slate-800/50 rounded-lg border border-slate-800 animate-fade-in">
-                                    <div className="flex items-center min-w-0">
-                                        <div className="p-1.5 bg-slate-800 rounded mr-3">
-                                            <DocumentTextIcon className="w-5 h-5 text-sky-500" />
+                    {fileItems.length > 0 && (
+                        <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                                <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Files</h4>
+                                <button 
+                                    onClick={simulateUpload}
+                                    disabled={fileItems.every(i => i.status === 'completed' || i.status === 'uploading')}
+                                    className="text-xs font-medium text-sky-600 hover:text-sky-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    Upload All
+                                </button>
+                            </div>
+                            {fileItems.map((item) => (
+                                <div key={item.id} className="relative p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                                    <div className="flex items-center justify-between relative z-10">
+                                        <div className="flex items-center min-w-0">
+                                            <div className={`p-2 rounded mr-3 ${item.status === 'completed' ? 'bg-green-100 text-green-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-500'}`}>
+                                                {item.status === 'completed' ? <CheckIcon className="w-4 h-4" /> : <DocumentTextIcon className="w-4 h-4" />}
+                                            </div>
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate max-w-[150px]">{item.file.name}</p>
+                                                <p className="text-xs text-slate-500">{(item.file.size / 1024).toFixed(0)} KB</p>
+                                            </div>
                                         </div>
-                                        <div className="truncate">
-                                            <p className="text-sm font-medium text-slate-200 truncate">{file.name}</p>
-                                            <p className="text-xs text-slate-500">{(file.size / 1024).toFixed(1)} KB</p>
+                                        <div className="flex items-center gap-3">
+                                            {item.status === 'uploading' && <span className="text-xs font-medium text-slate-500">{Math.round(item.progress)}%</span>}
+                                            <button onClick={() => removeFile(item.id)} className="p-1 text-slate-400 hover:text-red-500 transition-colors">
+                                                <CloseIcon className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     </div>
-                                    <button onClick={() => removeFile(idx)} className="p-1 text-slate-500 hover:text-red-400 hover:bg-red-900/20 rounded transition-colors">
-                                        <CloseIcon className="w-4 h-4" />
-                                    </button>
+                                    
+                                    {/* Progress Bar Background */}
+                                    {item.status !== 'pending' && (
+                                        <div 
+                                            className={`absolute bottom-0 left-0 h-1 transition-all duration-200 ease-out ${item.status === 'completed' ? 'bg-green-500' : 'bg-sky-500'}`}
+                                            style={{ width: `${item.progress}%` }}
+                                        ></div>
+                                    )}
                                 </div>
                             ))}
                         </div>
