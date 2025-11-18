@@ -205,12 +205,6 @@ const App: React.FC = () => {
                         {activeShowcase?.component}
                     </div>
                 </div>
-                <footer className="max-w-5xl mx-auto text-center mt-20 py-8 text-slate-500 dark:text-slate-600 text-sm border-t border-slate-200 dark:border-slate-800/50 transition-colors">
-                    <p className="flex items-center justify-center space-x-2">
-                        <span>Powered by Gemini</span>
-                        <GeminiIcon className="w-4 h-4" />
-                    </p>
-                </footer>
             </main>
             <style>{`
                 @keyframes fadeIn {
