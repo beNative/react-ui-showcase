@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 
@@ -5,8 +6,8 @@ const ToggleSwitch: React.FC<{ checked: boolean; onChange: (checked: boolean) =>
     <button
         type="button"
         className={`${
-            checked ? 'bg-sky-600' : 'bg-slate-600'
-        } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-slate-800`}
+            checked ? 'bg-sky-600' : 'bg-slate-200 dark:bg-slate-600'
+        } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-800`}
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
@@ -32,7 +33,7 @@ const ControlsDemo: React.FC = () => {
                 <div className="space-y-8">
                     {/* Slider */}
                     <div>
-                        <label htmlFor="slider" className="block text-sm font-medium text-slate-300">Slider Control</label>
+                        <label htmlFor="slider" className="block text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors">Slider Control</label>
                         <div className="flex items-center space-x-4 mt-2">
                             <input
                                 id="slider"
@@ -41,30 +42,30 @@ const ControlsDemo: React.FC = () => {
                                 max="100"
                                 value={sliderValue}
                                 onChange={(e) => setSliderValue(Number(e.target.value))}
-                                className="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                                className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-sky-500 transition-colors"
                             />
-                            <span className="text-sm font-semibold text-sky-400 w-10 text-center">{sliderValue}</span>
+                            <span className="text-sm font-semibold text-sky-600 dark:text-sky-400 w-10 text-center transition-colors">{sliderValue}</span>
                         </div>
                     </div>
 
                     {/* Toggles */}
                     <div>
-                         <h3 className="text-sm font-medium text-slate-300">Toggle Switches</h3>
+                         <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors">Toggle Switches</h3>
                          <div className="flex space-x-8 mt-3">
                              <div className="flex items-center space-x-2">
                                  <ToggleSwitch checked={toggle1} onChange={setToggle1} />
-                                 <span className="text-slate-400">Notifications</span>
+                                 <span className="text-slate-600 dark:text-slate-400 transition-colors">Notifications</span>
                              </div>
                              <div className="flex items-center space-x-2">
                                  <ToggleSwitch checked={toggle2} onChange={setToggle2} />
-                                 <span className="text-slate-400">Dark Mode</span>
+                                 <span className="text-slate-600 dark:text-slate-400 transition-colors">Dark Mode</span>
                              </div>
                          </div>
                     </div>
                     
                     {/* Radio Buttons */}
                     <div>
-                        <h3 className="text-sm font-medium text-slate-300">Radio Group</h3>
+                        <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors">Radio Group</h3>
                         <div className="flex space-x-8 mt-3">
                             {['option1', 'option2', 'option3'].map(option => (
                                 <label key={option} className="flex items-center space-x-2 cursor-pointer">
@@ -74,9 +75,9 @@ const ControlsDemo: React.FC = () => {
                                         value={option}
                                         checked={radioValue === option}
                                         onChange={(e) => setRadioValue(e.target.value)}
-                                        className="h-4 w-4 border-slate-500 text-sky-600 focus:ring-sky-500 bg-slate-700"
+                                        className="h-4 w-4 border-slate-300 dark:border-slate-500 text-sky-600 focus:ring-sky-500 bg-white dark:bg-slate-700 transition-colors"
                                     />
-                                    <span className="text-slate-400 capitalize">{option}</span>
+                                    <span className="text-slate-600 dark:text-slate-400 capitalize transition-colors">{option}</span>
                                 </label>
                             ))}
                         </div>
@@ -84,20 +85,20 @@ const ControlsDemo: React.FC = () => {
 
                     {/* Color Picker */}
                     <div>
-                        <label htmlFor="color-picker" className="block text-sm font-medium text-slate-300">Color Picker</label>
+                        <label htmlFor="color-picker" className="block text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors">Color Picker</label>
                         <div className="flex items-center space-x-4 mt-2">
                            <input
                                 id="color-picker"
                                 type="color"
                                 value={color}
                                 onChange={(e) => setColor(e.target.value)}
-                                className="p-1 h-10 w-14 block bg-slate-700 border border-slate-600 cursor-pointer rounded-lg"
+                                className="p-1 h-10 w-14 block bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 cursor-pointer rounded-lg transition-colors"
                             />
                             <div
-                                className="w-10 h-10 rounded-md border-2 border-slate-500"
+                                className="w-10 h-10 rounded-md border-2 border-slate-200 dark:border-slate-500 transition-colors"
                                 style={{ backgroundColor: color }}
                             ></div>
-                            <span className="font-mono text-sm text-slate-400">{color}</span>
+                            <span className="font-mono text-sm text-slate-500 dark:text-slate-400 transition-colors">{color}</span>
                         </div>
                     </div>
                 </div>

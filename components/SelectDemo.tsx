@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 
@@ -44,21 +45,21 @@ const SelectDemo: React.FC = () => {
                     <button
                         type="button"
                         onClick={() => setIsOpen(!isOpen)}
-                        className="w-full bg-slate-700 border border-slate-600 rounded-md px-3 py-2 text-left flex justify-between items-center focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none"
+                        className="w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 text-left flex justify-between items-center focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none text-slate-900 dark:text-slate-100 transition-colors"
                     >
                         <span>{selectedValue.label}</span>
                         <svg className={`w-5 h-5 text-slate-400 transition-transform ${isOpen ? 'transform rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                     </button>
 
                     {isOpen && (
-                        <div className="absolute z-10 mt-1 w-full bg-slate-800 border border-slate-600 rounded-md shadow-lg">
+                        <div className="absolute z-10 mt-1 w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg transition-colors">
                             <div className="p-2">
                                 <input
                                     type="text"
                                     placeholder="Search frameworks..."
                                     value={searchTerm}
                                     onChange={e => setSearchTerm(e.target.value)}
-                                    className="w-full bg-slate-700 border border-slate-600 rounded-md px-3 py-2 text-sm placeholder-slate-400 focus:ring-1 focus:ring-sky-500 focus:border-sky-500 outline-none"
+                                    className="w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 text-sm placeholder-slate-500 dark:placeholder-slate-400 text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-sky-500 focus:border-sky-500 outline-none transition-colors"
                                 />
                             </div>
                             <ul className="max-h-60 overflow-y-auto">
@@ -66,7 +67,7 @@ const SelectDemo: React.FC = () => {
                                     <li
                                         key={option.value}
                                         onClick={() => handleSelect(option)}
-                                        className="px-4 py-2 text-sm cursor-pointer hover:bg-sky-600 hover:text-white"
+                                        className="px-4 py-2 text-sm cursor-pointer hover:bg-sky-50 dark:hover:bg-sky-600 text-slate-700 dark:text-slate-200 hover:text-sky-700 dark:hover:text-white transition-colors"
                                     >
                                         {option.label}
                                     </li>

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
@@ -27,14 +28,14 @@ const Dialog: React.FC<{ isOpen: boolean; onClose: () => void; children: React.R
 
     return ReactDOM.createPortal(
         <div
-            className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 ${blur ? 'backdrop-blur-sm' : ''} transition-all`}
+            className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-black/60 ${blur ? 'backdrop-blur-sm' : ''} transition-all`}
             onClick={onClose}
             role="dialog"
             aria-modal="true"
         >
             <div
                 ref={dialogRef}
-                className="relative w-full max-w-md bg-slate-900 rounded-lg shadow-2xl border border-slate-700 scale-100 animate-scale-in"
+                className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 scale-100 animate-scale-in transition-colors"
                 onClick={(e) => e.stopPropagation()}
                 tabIndex={-1}
             >
@@ -72,17 +73,17 @@ const DialogDemo: React.FC = () => {
                     </div>
 
                      {/* Configuration */}
-                     <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4 w-full">
-                        <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                     <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4 w-full transition-colors">
+                        <h3 className="text-sm font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
                         <div>
                              <label className="flex items-center space-x-2 cursor-pointer">
                                 <input 
                                     type="checkbox" 
                                     checked={useBlur} 
                                     onChange={(e) => setUseBlur(e.target.checked)}
-                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
                                 />
-                                <span className="text-sm text-slate-300">Enable Backdrop Blur</span>
+                                <span className="text-sm text-slate-700 dark:text-slate-300 transition-colors">Enable Backdrop Blur</span>
                             </label>
                         </div>
                     </div>
@@ -91,27 +92,27 @@ const DialogDemo: React.FC = () => {
 
             <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)} blur={useBlur}>
                 <div className="p-6">
-                    <div className="flex justify-between items-center pb-4 border-b border-slate-800">
-                        <h3 className="text-lg font-semibold text-slate-100">Deactivate Account</h3>
-                         <button onClick={() => setIsOpen(false)} className="p-1 rounded-md text-slate-400 hover:bg-slate-800 hover:text-slate-100 transition-colors">
+                    <div className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-800 transition-colors">
+                        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Deactivate Account</h3>
+                         <button onClick={() => setIsOpen(false)} className="p-1 rounded-md text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
                             <CloseIcon className="w-5 h-5"/>
                         </button>
                     </div>
                     <div className="mt-4">
-                        <p className="text-sm text-slate-400 leading-relaxed">
+                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                             Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.
                         </p>
                     </div>
                     <div className="mt-8 flex justify-end space-x-3">
                         <button
                             onClick={() => setIsOpen(false)}
-                            className="px-4 py-2 bg-slate-800 border border-slate-700 text-slate-300 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors"
+                            className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                         >
                             Cancel
                         </button>
                         <button
                             onClick={() => setIsOpen(false)}
-                            className="px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-400 rounded-md text-sm font-medium hover:bg-red-500/20 transition-colors"
+                            className="px-4 py-2 bg-red-50 border border-red-200 text-red-600 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400 rounded-md text-sm font-medium hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors"
                         >
                             Deactivate
                         </button>
