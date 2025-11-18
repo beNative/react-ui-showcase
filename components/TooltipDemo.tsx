@@ -1,9 +1,31 @@
-import React, { useState } from 'react';
+
+import React, { useState, useRef } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 
 type Placement = 'top' | 'bottom' | 'left' | 'right';
 
-const Tooltip: React.FC<{ content: string; children: React.ReactNode; placement: Placement }> = ({ content, children, placement }) => {
+const Tooltip: React.FC<{ 
+    content: string; 
+    children: React.ReactNode; 
+    placement: Placement;
+    delay: number;
+}> = ({ content, children, placement, delay }) => {
+    const [isVisible, setIsVisible] = useState(false);
+    const timeoutRef = useRef<any>(null);
+
+    const show = () => {
+        timeoutRef.current = setTimeout(() => {
+            setIsVisible(true);
+        }, delay);
+    };
+
+    const hide = () => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        setIsVisible(false);
+    };
+
     const placementClasses = {
         top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
         bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
@@ -19,9 +41,20 @@ const Tooltip: React.FC<{ content: string; children: React.ReactNode; placement:
     };
 
     return (
-        <div className="relative inline-block group">
+        <div 
+            className="relative inline-block" 
+            onMouseEnter={show} 
+            onMouseLeave={hide}
+            onFocus={show}
+            onBlur={hide}
+        >
             {children}
-            <div className={`absolute w-max max-w-xs px-3 py-1.5 bg-slate-900 text-white text-sm rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none border border-slate-700 z-10 ${placementClasses[placement]}`}>
+            <div className={`
+                absolute w-max max-w-xs px-3 py-1.5 bg-slate-900 text-white text-sm rounded-md shadow-lg 
+                transition-all duration-200 pointer-events-none border border-slate-700 z-10 
+                ${placementClasses[placement]}
+                ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}
+            `}>
                 {content}
                 <div className={`absolute w-0 h-0 ${arrowClasses[placement]}`}></div>
             </div>
@@ -31,34 +64,49 @@ const Tooltip: React.FC<{ content: string; children: React.ReactNode; placement:
 
 const TooltipDemo: React.FC = () => {
     const [placement, setPlacement] = useState<Placement>('top');
+    const [delay, setDelay] = useState(200);
 
     return (
         <div>
             <LivePreview>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                     <div className="flex items-center justify-center h-32 space-x-8 text-slate-300">
-                        <Tooltip content="This is a button!" placement={placement}>
-                            <button className="px-4 py-2 bg-slate-600 rounded-md hover:bg-slate-500 transition-colors">
+                        <Tooltip content="This is a tooltip!" placement={placement} delay={delay}>
+                            <button className="px-4 py-2 bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-md hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
                                 Hover Me
                             </button>
                         </Tooltip>
                     </div>
 
                      {/* Configuration */}
-                     <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4 w-full">
-                        <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                     <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4 w-full transition-colors">
+                        <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
+                        
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-2">Placement</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Placement</label>
                             <select
                                 value={placement}
                                 onChange={(e) => setPlacement(e.target.value as Placement)}
-                                className="bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm w-full focus:ring-2 focus:ring-sky-500 outline-none text-slate-300"
+                                className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-2 text-sm w-full focus:ring-2 focus:ring-sky-500 outline-none text-slate-900 dark:text-slate-300 transition-colors"
                             >
                                 <option value="top">Top</option>
                                 <option value="bottom">Bottom</option>
                                 <option value="left">Left</option>
                                 <option value="right">Right</option>
                             </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Open Delay: {delay}ms</label>
+                            <input 
+                                type="range" 
+                                min="0" 
+                                max="1000" 
+                                step="100"
+                                value={delay} 
+                                onChange={(e) => setDelay(Number(e.target.value))}
+                                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                            />
                         </div>
                     </div>
                 </div>
