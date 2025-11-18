@@ -12,7 +12,8 @@ import {
     ViewColumnsIcon, CreditCardIcon, QueueListIcon, PencilSquareIcon, CloudArrowUpIcon,
     EllipsisHorizontalCircleIcon, Bars3BottomLeftIcon, ChatBubbleOvalLeftIcon, CompareIcon, RocketLaunchIcon,
     AtSymbolIcon, CommandLineIcon, ArrowPathRoundedSquareIcon, PresentationChartLineIcon,
-    RectangleGroupIcon, CodeBracketIcon, CalculatorIcon, QrCodeIcon, HandRaisedIcon, FingerPrintIcon, FaceSmileIcon
+    RectangleGroupIcon, CodeBracketIcon, CalculatorIcon, QrCodeIcon, HandRaisedIcon, FingerPrintIcon, FaceSmileIcon,
+    EyeIcon, ShareIcon, CpuChipIcon, DocumentIcon
 } from './components/Icons';
 import MonacoEditorDemo from './components/MonacoEditorDemo';
 import ToastDemo from './components/ToastDemo';
@@ -76,6 +77,16 @@ import CreditCardDemo from './components/CreditCardDemo';
 import RippleDemo from './components/RippleDemo';
 import ScrollProgressDemo from './components/ScrollProgressDemo';
 import EmojiPickerDemo from './components/EmojiPickerDemo';
+import RichTextEditorDemo from './components/RichTextEditorDemo';
+import MarkdownEditorDemo from './components/MarkdownEditorDemo';
+import BlockEditorDemo from './components/BlockEditorDemo';
+import DiffViewerDemo from './components/DiffViewerDemo';
+import SpreadsheetDemo from './components/SpreadsheetDemo';
+import CodePreviewDemo from './components/CodePreviewDemo';
+import MathEditorDemo from './components/MathEditorDemo';
+import DiagramEditorDemo from './components/DiagramEditorDemo';
+import HexEditorDemo from './components/HexEditorDemo';
+import PdfViewerDemo from './components/PdfViewerDemo';
 
 
 const App: React.FC = () => {
@@ -118,6 +129,7 @@ const App: React.FC = () => {
 
         // Data Display
         { id: 'datagrid', name: 'Data Grid', icon: <TableCellsIcon className="w-5 h-5" />, component: <DataGridDemo />, category: 'Data Display' },
+        { id: 'spreadsheet', name: 'Spreadsheet', icon: <TableCellsIcon className="w-5 h-5 text-green-500" />, component: <SpreadsheetDemo />, category: 'Data Display' },
         { id: 'virtuallist', name: 'Virtual List', icon: <QueueListIcon className="w-5 h-5" />, component: <VirtualListDemo />, category: 'Data Display' },
         { id: 'masonry', name: 'Masonry Grid', icon: <RectangleGroupIcon className="w-5 h-5" />, component: <MasonryDemo />, category: 'Data Display' },
         { id: 'calendar', name: 'Calendar', icon: <CalendarDaysIcon className="w-5 h-5" />, component: <CalendarDemo />, category: 'Data Display' },
@@ -133,6 +145,9 @@ const App: React.FC = () => {
         { id: 'typewriter', name: 'Typewriter', icon: <CursorClickIcon className="w-5 h-5" />, component: <TypewriterDemo />, category: 'Data Display' },
         { id: 'syntax', name: 'Syntax Highlight', icon: <CodeBracketIcon className="w-5 h-5" />, component: <SyntaxHighlighterDemo />, category: 'Data Display' },
         { id: 'json', name: 'JSON Viewer', icon: <CodeIcon className="w-5 h-5" />, component: <JsonViewerDemo />, category: 'Data Display' },
+        { id: 'diff', name: 'Diff Viewer', icon: <ArrowsRightLeftIcon className="w-5 h-5" />, component: <DiffViewerDemo />, category: 'Data Display' },
+        { id: 'hex', name: 'Hex Editor', icon: <CpuChipIcon className="w-5 h-5" />, component: <HexEditorDemo />, category: 'Data Display' },
+        { id: 'pdf', name: 'PDF Viewer', icon: <DocumentIcon className="w-5 h-5" />, component: <PdfViewerDemo />, category: 'Data Display' },
         { id: 'countup', name: 'CountUp', icon: <CalculatorIcon className="w-5 h-5" />, component: <CountUpDemo />, category: 'Data Display' },
         { id: 'qrcode', name: 'QR Code', icon: <QrCodeIcon className="w-5 h-5" />, component: <QRCodeDemo />, category: 'Data Display' },
 
@@ -166,9 +181,15 @@ const App: React.FC = () => {
         { id: 'swipeable', name: 'Swipeable List', icon: <HandRaisedIcon className="w-5 h-5" />, component: <SwipeableListDemo />, category: 'Layout' },
 
         // Editors
+        { id: 'richtext', name: 'Rich Text Editor', icon: <PencilSquareIcon className="w-5 h-5" />, component: <RichTextEditorDemo />, category: 'Editors' },
+        { id: 'markdown', name: 'Markdown Editor', icon: <EyeIcon className="w-5 h-5" />, component: <MarkdownEditorDemo />, category: 'Editors' },
         { id: 'monaco', name: 'Code Editor', icon: <CodeIcon className="w-5 h-5" />, component: <MonacoEditorDemo />, category: 'Editors' },
+        { id: 'block', name: 'Block Editor', icon: <RectangleGroupIcon className="w-5 h-5" />, component: <BlockEditorDemo />, category: 'Editors' },
+        { id: 'codepreview', name: 'Code Playground', icon: <PlayCircleIcon className="w-5 h-5" />, component: <CodePreviewDemo />, category: 'Editors' },
+        { id: 'math', name: 'Math Editor', icon: <CalculatorIcon className="w-5 h-5" />, component: <MathEditorDemo />, category: 'Editors' },
+        { id: 'diagram', name: 'Diagram Editor', icon: <ShareIcon className="w-5 h-5" />, component: <DiagramEditorDemo />, category: 'Editors' },
         { id: 'terminal', name: 'Terminal', icon: <CommandLineIcon className="w-5 h-5" />, component: <TerminalDemo />, category: 'Editors' },
-        { id: 'wysiwyg', name: 'Rich Text', icon: <DocumentTextIcon className="w-5 h-5" />, component: <WysiwygDemo />, category: 'Editors' },
+        { id: 'wysiwyg', name: 'Legacy WYSIWYG', icon: <DocumentTextIcon className="w-5 h-5" />, component: <WysiwygDemo />, category: 'Editors' },
 
         // Media
         { id: 'image', name: 'Image Viewer', icon: <PhotoIcon className="w-5 h-5" />, component: <ImageViewerDemo />, category: 'Media' },
