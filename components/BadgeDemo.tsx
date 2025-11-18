@@ -1,13 +1,14 @@
+
 import React, { useState } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 
 const Badge: React.FC<{ children: React.ReactNode; variant?: 'primary' | 'success' | 'warning' | 'danger' | 'neutral'; rounded?: boolean; outline?: boolean }> = ({ children, variant = 'neutral', rounded = false, outline = false }) => {
     const variants = {
-        primary: outline ? 'border-sky-500 text-sky-400' : 'bg-sky-500/10 text-sky-400 border-sky-500/20',
-        success: outline ? 'border-green-500 text-green-400' : 'bg-green-500/10 text-green-400 border-green-500/20',
-        warning: outline ? 'border-yellow-500 text-yellow-400' : 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-        danger: outline ? 'border-red-500 text-red-400' : 'bg-red-500/10 text-red-400 border-red-500/20',
-        neutral: outline ? 'border-slate-500 text-slate-400' : 'bg-slate-500/10 text-slate-400 border-slate-500/20',
+        primary: outline ? 'border-sky-500 text-sky-600 dark:text-sky-400' : 'bg-sky-100 dark:bg-sky-500/10 text-sky-700 dark:text-sky-400 border-sky-200 dark:border-sky-500/20',
+        success: outline ? 'border-green-500 text-green-600 dark:text-green-400' : 'bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/20',
+        warning: outline ? 'border-yellow-500 text-yellow-600 dark:text-yellow-400' : 'bg-yellow-100 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/20',
+        danger: outline ? 'border-red-500 text-red-600 dark:text-red-400' : 'bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400 border-red-200 dark:border-red-500/20',
+        neutral: outline ? 'border-slate-500 text-slate-600 dark:text-slate-400' : 'bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-500/20',
     };
 
     return (
@@ -37,16 +38,16 @@ const BadgeDemo: React.FC = () => {
                     </div>
 
                     {/* Configuration */}
-                    <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4 w-full">
-                         <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                    <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4 w-full transition-colors">
+                         <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
                          
                          <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1">Label Text</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Label Text</label>
                             <input 
                                 type="text" 
                                 value={labelText}
                                 onChange={(e) => setLabelText(e.target.value)}
-                                className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-300 focus:ring-2 focus:ring-sky-500 outline-none"
+                                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-2 text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-sky-500 outline-none transition-colors"
                             />
                         </div>
 
@@ -56,18 +57,18 @@ const BadgeDemo: React.FC = () => {
                                     type="checkbox" 
                                     checked={rounded} 
                                     onChange={(e) => setRounded(e.target.checked)}
-                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
                                 />
-                                <span className="text-sm text-slate-300">Rounded (Pill)</span>
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Rounded (Pill)</span>
                             </label>
                             <label className="flex items-center space-x-2 cursor-pointer">
                                 <input 
                                     type="checkbox" 
                                     checked={outline} 
                                     onChange={(e) => setOutline(e.target.checked)}
-                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
                                 />
-                                <span className="text-sm text-slate-300">Outline Variant</span>
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Outline Variant</span>
                             </label>
                         </div>
                     </div>

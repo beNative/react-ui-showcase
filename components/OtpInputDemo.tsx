@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 
@@ -49,7 +50,7 @@ const OtpInput: React.FC<{ length?: number; value: string; onChange: (val: strin
                     onChange={e => handleChange(e, idx)}
                     onKeyDown={e => handleKeyDown(e, idx)}
                     onPaste={handlePaste}
-                    className="w-12 h-12 text-center text-xl font-bold bg-slate-800 border border-slate-600 rounded-md focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all text-white"
+                    className="w-12 h-12 text-center text-xl font-bold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all text-slate-900 dark:text-white"
                 />
             ))}
         </div>
@@ -66,19 +67,19 @@ const OtpInputDemo: React.FC = () => {
             <LivePreview>
                 <div className="flex flex-col items-center space-y-8">
                     <div className="text-center">
-                        <h3 className="text-slate-300 mb-4 font-medium">Enter Verification Code</h3>
+                        <h3 className="text-slate-700 dark:text-slate-300 mb-4 font-medium">Enter Verification Code</h3>
                         <OtpInput length={length} value={otp} onChange={setOtp} isMasked={isMasked} />
                         <p className="mt-4 text-sm text-slate-500">
-                            Current Value: <span className="font-mono text-sky-400">{otp || '(empty)'}</span>
+                            Current Value: <span className="font-mono text-sky-600 dark:text-sky-400">{otp || '(empty)'}</span>
                         </p>
                     </div>
 
                     {/* Configuration */}
-                    <div className="w-full bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4">
-                        <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                    <div className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4 transition-colors">
+                        <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
                         
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1">Length: {length}</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Length: {length}</label>
                             <input 
                                 type="range" 
                                 min="4" 
@@ -88,7 +89,7 @@ const OtpInputDemo: React.FC = () => {
                                     setLength(Number(e.target.value));
                                     setOtp('');
                                 }}
-                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
                             />
                         </div>
                         <div>
@@ -97,9 +98,9 @@ const OtpInputDemo: React.FC = () => {
                                     type="checkbox" 
                                     checked={isMasked} 
                                     onChange={(e) => setIsMasked(e.target.checked)}
-                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
                                 />
-                                <span className="text-sm text-slate-300">Mask Input</span>
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Mask Input</span>
                             </label>
                         </div>
                     </div>

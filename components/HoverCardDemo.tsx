@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 import { IdentificationIcon, CalendarDaysIcon } from './Icons';
@@ -23,7 +24,7 @@ const HoverCardDemo: React.FC = () => {
                     <div className="relative inline-block">
                         <a
                             href="#"
-                            className="text-sm font-medium text-sky-400 hover:underline underline-offset-4"
+                            className="text-sm font-medium text-sky-600 dark:text-sky-400 hover:underline underline-offset-4"
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                             onClick={(e) => e.preventDefault()}
@@ -33,19 +34,19 @@ const HoverCardDemo: React.FC = () => {
 
                         {/* Card Content */}
                         <div
-                            className={`absolute z-20 bottom-full left-1/2 -translate-x-1/2 mb-2 w-80 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-4 transition-all duration-200 origin-bottom ${isHovered ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-2 pointer-events-none'}`}
+                            className={`absolute z-20 bottom-full left-1/2 -translate-x-1/2 mb-2 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl p-4 transition-all duration-200 origin-bottom ${isHovered ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-2 pointer-events-none'}`}
                             onMouseEnter={handleMouseEnter} // Keep open when hovering content
                             onMouseLeave={handleMouseLeave}
                         >
                             <div className="flex justify-between space-x-4">
                                 <div className="flex-shrink-0">
-                                     <div className="h-12 w-12 rounded-full bg-white text-black flex items-center justify-center text-xl font-bold">
-                                         <span className="text-black">N</span>
+                                     <div className="h-12 w-12 rounded-full bg-black dark:bg-white text-white dark:text-black flex items-center justify-center text-xl font-bold">
+                                         <span>N</span>
                                      </div>
                                 </div>
                                 <div className="space-y-1">
-                                    <h4 className="text-sm font-semibold text-slate-100">Next.js</h4>
-                                    <p className="text-sm text-slate-400">The React Framework – created and maintained by @vercel.</p>
+                                    <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Next.js</h4>
+                                    <p className="text-sm text-slate-600 dark:text-slate-400">The React Framework – created and maintained by @vercel.</p>
                                     <div className="flex items-center pt-2">
                                         <CalendarDaysIcon className="mr-2 h-4 w-4 opacity-70 text-slate-500" />
                                         <span className="text-xs text-slate-500">Joined December 2010</span>
@@ -53,7 +54,7 @@ const HoverCardDemo: React.FC = () => {
                                 </div>
                             </div>
                             {/* Arrow */}
-                             <div className="absolute left-1/2 -translate-x-1/2 bottom-[-6px] w-3 h-3 bg-slate-900 border-r border-b border-slate-800 transform rotate-45"></div>
+                             <div className="absolute left-1/2 -translate-x-1/2 bottom-[-6px] w-3 h-3 bg-white dark:bg-slate-900 border-r border-b border-slate-200 dark:border-slate-800 transform rotate-45"></div>
                         </div>
                     </div>
                 </div>

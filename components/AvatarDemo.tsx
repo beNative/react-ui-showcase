@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 
@@ -23,11 +24,11 @@ const Avatar: React.FC<{ src?: string; fallback: string; alt: string; status?: '
 
     return (
         <div className="relative inline-block">
-            <div className={`${sizeClasses[size]} rounded-full overflow-hidden border-2 border-slate-800 bg-slate-700 flex items-center justify-center text-slate-300 font-medium`}>
+            <div className={`${sizeClasses[size]} rounded-full overflow-hidden border-2 border-white dark:border-slate-800 bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 font-medium shadow-sm transition-colors`}>
                 {src ? <img src={src} alt={alt} className="w-full h-full object-cover" /> : fallback}
             </div>
             {status !== 'none' && (
-                <span className={`absolute bottom-0 right-0 block ${indicatorSize[size]} rounded-full ring-2 ring-slate-900 ${statusColors[status]}`} />
+                <span className={`absolute bottom-0 right-0 block ${indicatorSize[size]} rounded-full ring-2 ring-white dark:ring-slate-900 ${statusColors[status]}`} />
             )}
         </div>
     );
@@ -57,14 +58,14 @@ const AvatarDemo: React.FC = () => {
                         </div>
                         
                         {/* Avatar Group */}
-                        <div className="flex flex-col items-center pt-4 border-t border-slate-800 w-full">
-                            <h4 className="text-sm font-medium text-slate-400 mb-3">Stacked Group</h4>
+                        <div className="flex flex-col items-center pt-4 border-t border-slate-200 dark:border-slate-800 w-full transition-colors">
+                            <h4 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-3">Stacked Group</h4>
                             <AvatarGroup spacing={groupSpacing}>
                                  <Avatar src="https://i.pravatar.cc/150?u=3" fallback="U1" alt="User 1" size="md" />
                                  <Avatar src="https://i.pravatar.cc/150?u=4" fallback="U2" alt="User 2" size="md" />
                                  <Avatar src="https://i.pravatar.cc/150?u=5" fallback="U3" alt="User 3" size="md" />
                                  <Avatar src="https://i.pravatar.cc/150?u=6" fallback="U4" alt="User 4" size="md" />
-                                 <div className="relative inline-flex items-center justify-center w-12 h-12 text-xs font-medium text-white bg-slate-700 border-2 border-slate-800 rounded-full hover:bg-slate-600 cursor-pointer transition-colors">
+                                 <div className="relative inline-flex items-center justify-center w-12 h-12 text-xs font-medium text-white bg-slate-700 rounded-full border-2 border-white dark:border-slate-800 hover:bg-slate-600 cursor-pointer transition-colors shadow-sm">
                                     +99
                                  </div>
                             </AvatarGroup>
@@ -72,17 +73,17 @@ const AvatarDemo: React.FC = () => {
                     </div>
 
                     {/* Configuration */}
-                    <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4 w-full self-stretch">
-                        <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                    <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4 w-full self-stretch transition-colors">
+                        <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
                         
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1">Size</label>
-                            <div className="flex space-x-2 bg-slate-800 p-1 rounded-md">
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Size</label>
+                            <div className="flex space-x-2 bg-white dark:bg-slate-800 p-1 rounded-md border border-slate-200 dark:border-slate-700">
                                 {(['sm', 'md', 'lg'] as const).map((s) => (
                                     <button
                                         key={s}
                                         onClick={() => setSize(s)}
-                                        className={`flex-1 px-3 py-1.5 text-sm rounded ${size === s ? 'bg-slate-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
+                                        className={`flex-1 px-3 py-1.5 text-sm rounded ${size === s ? 'bg-slate-100 dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
                                     >
                                         {s.toUpperCase()}
                                     </button>
@@ -96,18 +97,18 @@ const AvatarDemo: React.FC = () => {
                                     type="checkbox" 
                                     checked={showStatus} 
                                     onChange={(e) => setShowStatus(e.target.checked)}
-                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
                                 />
-                                <span className="text-sm text-slate-300">Show Status Indicator</span>
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Show Status Indicator</span>
                             </label>
                         </div>
 
                          <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1">Group Spacing</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Group Spacing</label>
                             <select 
                                 value={groupSpacing}
                                 onChange={(e) => setGroupSpacing(e.target.value as any)}
-                                className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none"
+                                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-2 text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-colors"
                             >
                                 <option value="tight">Tight Overlap</option>
                                 <option value="normal">Normal Overlap</option>

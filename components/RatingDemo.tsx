@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 import { StarIcon } from './Icons';
@@ -16,7 +17,7 @@ const Rating: React.FC<{ max?: number; initialValue?: number; onChange?: (val: n
                         key={index}
                         type="button"
                         disabled={readOnly}
-                        className={`w-8 h-8 transition-transform ${readOnly ? 'cursor-default' : 'hover:scale-110 cursor-pointer'} focus:outline-none ${isActive ? 'text-yellow-400' : 'text-slate-700'}`}
+                        className={`w-8 h-8 transition-transform ${readOnly ? 'cursor-default' : 'hover:scale-110 cursor-pointer'} focus:outline-none ${isActive ? 'text-yellow-400' : 'text-slate-300 dark:text-slate-700'}`}
                         onClick={() => {
                             if (!readOnly) {
                                 setRating(value);
@@ -30,7 +31,7 @@ const Rating: React.FC<{ max?: number; initialValue?: number; onChange?: (val: n
                     </button>
                 );
             })}
-            <span className="ml-2 text-sm font-medium text-slate-400">{rating > 0 ? `${rating} out of ${max}` : 'No rating'}</span>
+            <span className="ml-2 text-sm font-medium text-slate-500 dark:text-slate-400">{rating > 0 ? `${rating} out of ${max}` : 'No rating'}</span>
         </div>
     );
 };
@@ -45,24 +46,24 @@ const RatingDemo: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                     <div className="flex flex-col items-center justify-center space-y-6 w-full">
                         <div className="text-center">
-                            <h3 className="text-lg font-semibold text-slate-200 mb-2">Rate your experience</h3>
+                            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-200 mb-2">Rate your experience</h3>
                             <Rating max={maxStars} readOnly={isReadOnly} initialValue={3} />
                         </div>
                     </div>
 
                     {/* Configuration */}
-                    <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4 w-full">
-                         <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                    <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4 w-full transition-colors">
+                         <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
                          
                          <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1">Max Stars: {maxStars}</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Max Stars: {maxStars}</label>
                             <input 
                                 type="range" 
                                 min="3" 
                                 max="10" 
                                 value={maxStars} 
                                 onChange={(e) => setMaxStars(Number(e.target.value))}
-                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
                             />
                         </div>
 
@@ -72,9 +73,9 @@ const RatingDemo: React.FC = () => {
                                     type="checkbox" 
                                     checked={isReadOnly} 
                                     onChange={(e) => setIsReadOnly(e.target.checked)}
-                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
                                 />
-                                <span className="text-sm text-slate-300">Read Only</span>
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Read Only</span>
                             </label>
                         </div>
                     </div>

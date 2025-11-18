@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
@@ -26,31 +27,31 @@ const ContextMenuDemo: React.FC = () => {
                 <div
                     ref={triggerRef}
                     onContextMenu={handleContextMenu}
-                    className="w-full h-48 rounded-xl border-2 border-dashed border-slate-700 bg-slate-900/50 flex flex-col items-center justify-center cursor-context-menu hover:border-slate-600 transition-colors"
+                    className="w-full h-48 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 flex flex-col items-center justify-center cursor-context-menu hover:border-slate-400 dark:hover:border-slate-600 transition-colors"
                 >
-                    <CursorClickIcon className="w-10 h-10 text-slate-500 mb-2" />
-                    <span className="text-slate-400 font-medium">Right click here</span>
+                    <CursorClickIcon className="w-10 h-10 text-slate-400 dark:text-slate-500 mb-2" />
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">Right click here</span>
                 </div>
 
                 {/* Menu Portal */}
                 {visible && ReactDOM.createPortal(
                     <div
-                        className="fixed z-50 w-48 rounded-md border border-slate-700 bg-slate-800 shadow-xl py-1 animate-scale-in origin-top-left"
+                        className="fixed z-50 w-48 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xl py-1 animate-scale-in origin-top-left transition-colors"
                         style={{ top: coords.y, left: coords.x }}
                     >
-                         <div className="px-2 py-1.5 text-xs font-semibold text-slate-500 uppercase">Actions</div>
-                        <button className="w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-sky-600 hover:text-white flex items-center transition-colors">
+                         <div className="px-2 py-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Actions</div>
+                        <button className="w-full text-left px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-sky-50 dark:hover:bg-sky-600 hover:text-sky-700 dark:hover:text-white flex items-center transition-colors">
                             <DocumentTextIcon className="w-4 h-4 mr-2" />
                             Open
                         </button>
-                        <button className="w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-sky-600 hover:text-white transition-colors">
+                        <button className="w-full text-left px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-sky-50 dark:hover:bg-sky-600 hover:text-sky-700 dark:hover:text-white transition-colors">
                             Rename
                         </button>
-                        <button className="w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-sky-600 hover:text-white transition-colors">
+                        <button className="w-full text-left px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-sky-50 dark:hover:bg-sky-600 hover:text-sky-700 dark:hover:text-white transition-colors">
                             Duplicate
                         </button>
-                        <div className="h-px bg-slate-700 my-1"></div>
-                         <button className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-red-900/30 transition-colors flex items-center">
+                        <div className="h-px bg-slate-200 dark:bg-slate-700 my-1"></div>
+                         <button className="w-full text-left px-3 py-2 text-sm text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors flex items-center">
                              <CloseIcon className="w-4 h-4 mr-2" />
                             Delete
                         </button>
@@ -75,7 +76,7 @@ const ContextMenuDemo: React.FC = () => {
                 features={[
                     "Right-click trigger support.",
                     "Nested submenus.",
-                    "Keyboard navigation (arrows).",
+                    "Keyboard navigation (arrow keys).",
                     "Screen boundary collision detection."
                 ]}
                 installation="npm install @radix-ui/react-context-menu"

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 
@@ -19,11 +20,11 @@ const ProgressDemo: React.FC = () => {
                     
                     {variant === 'linear' ? (
                         <div className="w-full space-y-2">
-                             <div className="flex justify-between text-xs text-slate-400">
+                             <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
                                 <span>Progress</span>
                                 <span>{progress}%</span>
                             </div>
-                            <div className="w-full bg-slate-700 rounded-full h-2.5 overflow-hidden">
+                            <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 overflow-hidden transition-colors">
                                 <div 
                                     className="bg-sky-500 h-2.5 rounded-full transition-all duration-1000 ease-out" 
                                     style={{ width: `${progress}%` }}
@@ -34,7 +35,7 @@ const ProgressDemo: React.FC = () => {
                         <div className="relative w-32 h-32">
                             <svg className="w-full h-full" viewBox="0 0 100 100">
                                 <circle 
-                                    className="text-slate-700 stroke-current" 
+                                    className="text-slate-200 dark:text-slate-700 stroke-current transition-colors" 
                                     strokeWidth="10" 
                                     cx="50" 
                                     cy="50" 
@@ -54,21 +55,21 @@ const ProgressDemo: React.FC = () => {
                                     transform="rotate(-90 50 50)"
                                 ></circle>
                             </svg>
-                            <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-xl font-bold text-slate-200">
+                            <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-xl font-bold text-slate-800 dark:text-slate-200">
                                 {progress}%
                             </div>
                         </div>
                     )}
 
-                    <button onClick={randomize} className="px-4 py-2 bg-slate-800 border border-slate-700 hover:bg-slate-700 rounded text-sm transition-colors">
+                    <button onClick={randomize} className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded text-sm text-slate-700 dark:text-slate-300 transition-colors">
                         Randomize Value
                     </button>
 
                     {/* Configuration */}
-                    <div className="w-full bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4">
-                        <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                    <div className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4 transition-colors">
+                        <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-2">Variant</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Variant</label>
                             <div className="flex space-x-4">
                                 <label className="flex items-center space-x-2 cursor-pointer">
                                     <input 
@@ -76,9 +77,9 @@ const ProgressDemo: React.FC = () => {
                                         name="variant"
                                         checked={variant === 'linear'} 
                                         onChange={() => setVariant('linear')}
-                                        className="h-4 w-4 text-sky-600 border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                        className="h-4 w-4 text-sky-600 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
                                     />
-                                    <span className="text-sm text-slate-300">Linear</span>
+                                    <span className="text-sm text-slate-700 dark:text-slate-300">Linear</span>
                                 </label>
                                 <label className="flex items-center space-x-2 cursor-pointer">
                                     <input 
@@ -86,9 +87,9 @@ const ProgressDemo: React.FC = () => {
                                         name="variant"
                                         checked={variant === 'circular'} 
                                         onChange={() => setVariant('circular')}
-                                        className="h-4 w-4 text-sky-600 border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                        className="h-4 w-4 text-sky-600 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
                                     />
-                                    <span className="text-sm text-slate-300">Circular</span>
+                                    <span className="text-sm text-slate-700 dark:text-slate-300">Circular</span>
                                 </label>
                             </div>
                         </div>

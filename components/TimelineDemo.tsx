@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 import { ClockIcon } from './Icons';
@@ -14,19 +15,19 @@ const TimelineDemo: React.FC = () => {
         <div>
             <LivePreview>
                 <div className="max-w-md mx-auto p-4">
-                    <div className="relative border-l border-slate-700 ml-3 space-y-8">
+                    <div className="relative border-l border-slate-200 dark:border-slate-700 ml-3 space-y-8 transition-colors">
                         {steps.map((step, index) => (
                             <div key={index} className="relative pl-8 group">
                                 {/* Dot */}
                                 <div 
-                                    className={`absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full border-2 transition-colors duration-300 ${step.active ? 'bg-sky-500 border-sky-500' : 'bg-slate-900 border-slate-600 group-hover:border-slate-500'}`}
+                                    className={`absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full border-2 transition-colors duration-300 ${step.active ? 'bg-sky-500 border-sky-500' : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-600 group-hover:border-slate-400 dark:group-hover:border-slate-500'}`}
                                 ></div>
                                 
                                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
-                                     <h3 className={`text-sm font-medium ${step.active ? 'text-slate-200' : 'text-slate-500'}`}>{step.title}</h3>
-                                     <span className="text-xs text-slate-500 font-mono mt-1 sm:mt-0">{step.date}</span>
+                                     <h3 className={`text-sm font-medium ${step.active ? 'text-slate-900 dark:text-slate-200' : 'text-slate-500 dark:text-slate-500'}`}>{step.title}</h3>
+                                     <span className="text-xs text-slate-400 dark:text-slate-500 font-mono mt-1 sm:mt-0">{step.date}</span>
                                 </div>
-                                <p className="text-sm text-slate-400 mt-1">{step.description}</p>
+                                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{step.description}</p>
                             </div>
                         ))}
                     </div>

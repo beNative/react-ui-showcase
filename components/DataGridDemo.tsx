@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 
@@ -52,44 +53,46 @@ const DataGridDemo: React.FC = () => {
     };
     
     const SortIcon: React.FC<{ columnKey: SortKey }> = ({ columnKey }) => {
-        if (sortKey !== columnKey) return <svg className="w-4 h-4 text-slate-500 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" /></svg>;
-        if (sortOrder === 'asc') return <svg className="w-4 h-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>;
-        return <svg className="w-4 h-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>;
+        if (sortKey !== columnKey) return <svg className="w-4 h-4 text-slate-400 dark:text-slate-500 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" /></svg>;
+        if (sortOrder === 'asc') return <svg className="w-4 h-4 inline-block ml-1 text-sky-600 dark:text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>;
+        return <svg className="w-4 h-4 inline-block ml-1 text-sky-600 dark:text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>;
     };
 
     return (
         <div>
             <LivePreview>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left text-slate-400">
-                        <thead className="text-xs text-slate-300 uppercase bg-slate-700/50">
-                            <tr>
-                                {(Object.keys(mockData[0]) as SortKey[]).map(key => (
-                                    <th key={key} scope="col" className="px-6 py-3 cursor-pointer select-none" onClick={() => handleSort(key)}>
-                                        {key} <SortIcon columnKey={key} />
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {paginatedData.map(item => (
-                                <tr key={item.id} className="bg-slate-800 border-b border-slate-700 hover:bg-slate-700/50">
-                                    <td className="px-6 py-4">{item.id}</td>
-                                    <td className="px-6 py-4 font-medium text-slate-200">{item.name}</td>
-                                    <td className="px-6 py-4">{item.age}</td>
-                                    <td className="px-6 py-4">{item.city}</td>
+                <div className="overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm text-left text-slate-600 dark:text-slate-400">
+                            <thead className="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700">
+                                <tr>
+                                    {(Object.keys(mockData[0]) as SortKey[]).map(key => (
+                                        <th key={key} scope="col" className="px-6 py-3 cursor-pointer select-none hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" onClick={() => handleSort(key)}>
+                                            {key} <SortIcon columnKey={key} />
+                                        </th>
+                                    ))}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {paginatedData.map(item => (
+                                    <tr key={item.id} className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                        <td className="px-6 py-4 font-medium text-slate-900 dark:text-slate-200">{item.id}</td>
+                                        <td className="px-6 py-4 text-slate-700 dark:text-slate-300">{item.name}</td>
+                                        <td className="px-6 py-4">{item.age}</td>
+                                        <td className="px-6 py-4">{item.city}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div className="flex justify-between items-center mt-4 px-2">
-                    <span className="text-sm text-slate-400">Page {currentPage} of {totalPages}</span>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">Page {currentPage} of {totalPages}</span>
                     <div className="inline-flex mt-2 xs:mt-0">
-                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="px-4 py-2 text-sm font-medium text-white bg-slate-700 rounded-l hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-white bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-l hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                             Prev
                         </button>
-                        <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="px-4 py-2 text-sm font-medium text-white bg-slate-700 rounded-r border-0 border-l border-slate-600 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-white bg-white dark:bg-slate-700 border border-l-0 border-slate-300 dark:border-slate-600 rounded-r hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                             Next
                         </button>
                     </div>

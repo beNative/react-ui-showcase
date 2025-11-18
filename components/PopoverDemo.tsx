@@ -24,35 +24,35 @@ const PopoverDemo: React.FC = () => {
                     <div className="relative inline-block" ref={popoverRef}>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className={`p-2 rounded-full bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors ${isOpen ? 'bg-slate-700 text-white ring-2 ring-sky-500/50' : ''}`}
+                            className={`p-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-sky-600 dark:hover:text-white transition-colors shadow-sm ${isOpen ? 'ring-2 ring-sky-500/50' : ''}`}
                         >
                             <AdjustmentsHorizontalIcon className="w-6 h-6" />
                         </button>
 
                         {isOpen && (
-                            <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-72 bg-slate-900 border border-slate-800 rounded-lg shadow-2xl p-4 z-20 animate-fade-in-up origin-top">
+                            <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-2xl p-4 z-20 animate-fade-in-up origin-top transition-colors">
                                 {/* Arrow */}
-                                <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-slate-900 border-l border-t border-slate-800 transform rotate-45"></div>
+                                <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-slate-900 border-l border-t border-slate-200 dark:border-slate-800 transform rotate-45"></div>
                                 
                                 <div className="relative z-10">
                                     <div className="flex justify-between items-center mb-3">
-                                        <h4 className="font-medium text-slate-200 text-sm">Dimensions</h4>
-                                        <button onClick={() => setIsOpen(false)} className="text-slate-500 hover:text-slate-300">
+                                        <h4 className="font-medium text-slate-800 dark:text-slate-200 text-sm">Dimensions</h4>
+                                        <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
                                             <CloseIcon className="w-4 h-4" />
                                         </button>
                                     </div>
                                     <div className="space-y-3">
                                         <div className="grid grid-cols-3 items-center gap-2">
-                                            <label className="text-xs text-slate-400">Width</label>
-                                            <input type="text" defaultValue="100%" className="col-span-2 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200 outline-none focus:border-sky-500" />
+                                            <label className="text-xs text-slate-500 dark:text-slate-400">Width</label>
+                                            <input type="text" defaultValue="100%" className="col-span-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-xs text-slate-700 dark:text-slate-200 outline-none focus:border-sky-500" />
                                         </div>
                                         <div className="grid grid-cols-3 items-center gap-2">
-                                            <label className="text-xs text-slate-400">Height</label>
-                                            <input type="text" defaultValue="250px" className="col-span-2 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200 outline-none focus:border-sky-500" />
+                                            <label className="text-xs text-slate-500 dark:text-slate-400">Height</label>
+                                            <input type="text" defaultValue="250px" className="col-span-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-xs text-slate-700 dark:text-slate-200 outline-none focus:border-sky-500" />
                                         </div>
                                         <div className="grid grid-cols-3 items-center gap-2">
-                                            <label className="text-xs text-slate-400">Max Width</label>
-                                            <input type="text" defaultValue="300px" className="col-span-2 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200 outline-none focus:border-sky-500" />
+                                            <label className="text-xs text-slate-500 dark:text-slate-400">Max Width</label>
+                                            <input type="text" defaultValue="300px" className="col-span-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-xs text-slate-700 dark:text-slate-200 outline-none focus:border-sky-500" />
                                         </div>
                                     </div>
                                 </div>

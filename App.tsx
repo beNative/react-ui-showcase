@@ -10,7 +10,8 @@ import {
     TagIcon, HomeIcon, StarIcon, KeyIcon, ProgressBarIcon, SidebarIcon, CommandIcon,
     ArrowsPointingOutIcon, CursorClickIcon, ScrollIcon, IdentificationIcon, SparklesIcon, ClockIcon,
     ViewColumnsIcon, CreditCardIcon, QueueListIcon, PencilSquareIcon, CloudArrowUpIcon,
-    EllipsisHorizontalCircleIcon, Bars3BottomLeftIcon, ChatBubbleOvalLeftIcon, CompareIcon, RocketLaunchIcon
+    EllipsisHorizontalCircleIcon, Bars3BottomLeftIcon, ChatBubbleOvalLeftIcon, CompareIcon, RocketLaunchIcon,
+    AtSymbolIcon, CommandLineIcon, ArrowPathRoundedSquareIcon, PresentationChartLineIcon
 } from './components/Icons';
 import MonacoEditorDemo from './components/MonacoEditorDemo';
 import ToastDemo from './components/ToastDemo';
@@ -54,6 +55,16 @@ import MenubarDemo from './components/MenubarDemo';
 import PopoverDemo from './components/PopoverDemo';
 import ImageCompareDemo from './components/ImageCompareDemo';
 import SpeedDialDemo from './components/TourDemo';
+import CalendarDemo from './components/CalendarDemo';
+import KanbanDemo from './components/KanbanDemo';
+import TransferDemo from './components/TransferDemo';
+import MentionsDemo from './components/MentionsDemo';
+import TerminalDemo from './components/TerminalDemo';
+import KnobDemo from './components/KnobDemo';
+import FlipCardDemo from './components/FlipCardDemo';
+import TypewriterDemo from './components/TypewriterDemo';
+import DockDemo from './components/DockDemo';
+import SparklineDemo from './components/SparklineDemo';
 
 
 const App: React.FC = () => {
@@ -86,18 +97,26 @@ const App: React.FC = () => {
         { id: 'datepicker', name: 'Date Picker', icon: <CalendarDaysIcon className="w-5 h-5" />, component: <DatePickerDemo />, category: 'Inputs' },
         { id: 'rangeslider', name: 'Range Slider', icon: <ArrowsRightLeftIcon className="w-5 h-5" />, component: <RangeSliderDemo />, category: 'Inputs' },
         { id: 'rating', name: 'Rating', icon: <StarIcon className="w-5 h-5" />, component: <RatingDemo />, category: 'Inputs' },
+        { id: 'knob', name: 'Knob', icon: <AdjustmentsHorizontalIcon className="w-5 h-5 transform rotate-90" />, component: <KnobDemo />, category: 'Inputs' },
+        { id: 'mentions', name: 'Mentions', icon: <AtSymbolIcon className="w-5 h-5" />, component: <MentionsDemo />, category: 'Inputs' },
         { id: 'signature', name: 'Signature Pad', icon: <PencilSquareIcon className="w-5 h-5" />, component: <SignaturePadDemo />, category: 'Inputs' },
         { id: 'dropzone', name: 'File Dropzone', icon: <CloudArrowUpIcon className="w-5 h-5" />, component: <DropzoneDemo />, category: 'Inputs' },
+        { id: 'transfer', name: 'Transfer', icon: <ArrowsRightLeftIcon className="w-5 h-5" />, component: <TransferDemo />, category: 'Inputs' },
 
         // Data Display
         { id: 'datagrid', name: 'Data Grid', icon: <TableCellsIcon className="w-5 h-5" />, component: <DataGridDemo />, category: 'Data Display' },
         { id: 'virtuallist', name: 'Virtual List', icon: <QueueListIcon className="w-5 h-5" />, component: <VirtualListDemo />, category: 'Data Display' },
+        { id: 'calendar', name: 'Calendar', icon: <CalendarDaysIcon className="w-5 h-5" />, component: <CalendarDemo />, category: 'Data Display' },
+        { id: 'kanban', name: 'Kanban', icon: <ViewColumnsIcon className="w-5 h-5" />, component: <KanbanDemo />, category: 'Data Display' },
         { id: 'tree', name: 'Tree View', icon: <ListTreeIcon className="w-5 h-5" />, component: <TreeViewDemo />, category: 'Data Display' },
         { id: 'charts', name: 'Charts', icon: <ChartBarIcon className="w-5 h-5" />, component: <ChartsDemo />, category: 'Data Display' },
+        { id: 'sparkline', name: 'Sparkline', icon: <PresentationChartLineIcon className="w-5 h-5" />, component: <SparklineDemo />, category: 'Data Display' },
+        { id: 'timeline', name: 'Timeline', icon: <ClockIcon className="w-5 h-5" />, component: <TimelineDemo />, category: 'Data Display' },
         { id: 'avatar', name: 'Avatar Group', icon: <UserCircleIcon className="w-5 h-5" />, component: <AvatarDemo />, category: 'Data Display' },
         { id: 'badge', name: 'Badge', icon: <TagIcon className="w-5 h-5" />, component: <BadgeDemo />, category: 'Data Display' },
         { id: 'hovercard', name: 'Hover Card', icon: <IdentificationIcon className="w-5 h-5" />, component: <HoverCardDemo />, category: 'Data Display' },
-        { id: 'timeline', name: 'Timeline', icon: <ClockIcon className="w-5 h-5" />, component: <TimelineDemo />, category: 'Data Display' },
+        { id: 'flipcard', name: 'Flip Card', icon: <ArrowPathRoundedSquareIcon className="w-5 h-5" />, component: <FlipCardDemo />, category: 'Data Display' },
+        { id: 'typewriter', name: 'Typewriter', icon: <CursorClickIcon className="w-5 h-5" />, component: <TypewriterDemo />, category: 'Data Display' },
 
         // Feedback
         { id: 'toast', name: 'Toast', icon: <BellIcon className="w-5 h-5" />, component: <ToastDemo />, category: 'Feedback' },
@@ -111,6 +130,7 @@ const App: React.FC = () => {
         // Navigation
         { id: 'tabs', name: 'Tabs', icon: <RectangleStackIcon className="w-5 h-5" />, component: <TabsDemo />, category: 'Navigation' },
         { id: 'menubar', name: 'Menubar', icon: <Bars3BottomLeftIcon className="w-5 h-5" />, component: <MenubarDemo />, category: 'Navigation' },
+        { id: 'dock', name: 'Dock', icon: <ComputerDesktopIcon className="w-5 h-5" />, component: <DockDemo />, category: 'Navigation' },
         { id: 'stepper', name: 'Stepper', icon: <EllipsisHorizontalCircleIcon className="w-5 h-5" />, component: <StepperDemo />, category: 'Navigation' },
         { id: 'breadcrumb', name: 'Breadcrumb', icon: <HomeIcon className="w-5 h-5" />, component: <BreadcrumbDemo />, category: 'Navigation' },
         { id: 'command', name: 'Command Palette', icon: <CommandIcon className="w-5 h-5" />, component: <CommandPaletteDemo />, category: 'Navigation' },
@@ -126,6 +146,7 @@ const App: React.FC = () => {
 
         // Editors
         { id: 'monaco', name: 'Code Editor', icon: <CodeIcon className="w-5 h-5" />, component: <MonacoEditorDemo />, category: 'Editors' },
+        { id: 'terminal', name: 'Terminal', icon: <CommandLineIcon className="w-5 h-5" />, component: <TerminalDemo />, category: 'Editors' },
         { id: 'wysiwyg', name: 'Rich Text', icon: <DocumentTextIcon className="w-5 h-5" />, component: <WysiwygDemo />, category: 'Editors' },
 
         // Media

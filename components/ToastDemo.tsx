@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
@@ -14,22 +15,22 @@ type ToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
 const TOAST_ICONS = {
     success: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
     ),
     error: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
     ),
     info: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
     ),
     warning: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
     ),
@@ -54,15 +55,15 @@ const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: number) => void }>
     }, [toast.id, toast.duration, onRemove]);
 
     return (
-        <div className="bg-slate-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden w-full max-w-sm animate-fade-in-up">
+        <div className="bg-white dark:bg-slate-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 border border-slate-100 dark:border-slate-700 overflow-hidden w-full max-w-sm animate-fade-in-up transition-colors">
             <div className="p-4">
                 <div className="flex items-start">
                     <div className="flex-shrink-0">{toast.icon}</div>
                     <div className="ml-3 w-0 flex-1 pt-0.5">
-                        <p className="text-sm font-medium text-slate-200">{toast.message}</p>
+                        <p className="text-sm font-medium text-slate-900 dark:text-slate-200">{toast.message}</p>
                     </div>
                     <div className="ml-4 flex-shrink-0 flex">
-                        <button onClick={() => onRemove(toast.id)} className="inline-flex text-slate-400 hover:text-slate-200">
+                        <button onClick={() => onRemove(toast.id)} className="inline-flex text-slate-400 hover:text-slate-500 dark:hover:text-slate-200">
                             <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                             </svg>
@@ -133,23 +134,23 @@ const ToastDemo: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-4 flex flex-col justify-center">
                         <div className="grid grid-cols-2 gap-4">
-                            <button onClick={() => addToast('success', 'Operation completed successfully!')} className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-semibold hover:bg-green-500 transition-colors">Success</button>
-                            <button onClick={() => addToast('error', 'An error occurred!')} className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-semibold hover:bg-red-500 transition-colors">Error</button>
-                            <button onClick={() => addToast('info', 'Here is some information.')} className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-semibold hover:bg-blue-500 transition-colors">Info</button>
-                            <button onClick={() => addToast('warning', 'Please check your input.')} className="px-4 py-2 bg-yellow-600 text-white rounded-md text-sm font-semibold hover:bg-yellow-500 transition-colors">Warning</button>
+                            <button onClick={() => addToast('success', 'Operation completed successfully!')} className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-semibold hover:bg-green-500 transition-colors shadow-sm">Success</button>
+                            <button onClick={() => addToast('error', 'An error occurred!')} className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-semibold hover:bg-red-500 transition-colors shadow-sm">Error</button>
+                            <button onClick={() => addToast('info', 'Here is some information.')} className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-semibold hover:bg-blue-500 transition-colors shadow-sm">Info</button>
+                            <button onClick={() => addToast('warning', 'Please check your input.')} className="px-4 py-2 bg-yellow-500 text-white rounded-md text-sm font-semibold hover:bg-yellow-400 transition-colors shadow-sm">Warning</button>
                         </div>
                     </div>
 
                     {/* Configuration Panel */}
-                    <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4">
-                         <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                    <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4 transition-colors">
+                         <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
                         <div>
-                            <label htmlFor="position-select" className="block text-sm font-medium text-slate-300 mb-2">Position</label>
+                            <label htmlFor="position-select" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Position</label>
                             <select
                                 id="position-select"
                                 value={position}
                                 onChange={(e) => setPosition(e.target.value as ToastPosition)}
-                                className="bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm w-full focus:ring-2 focus:ring-sky-500 outline-none"
+                                className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-2 text-sm w-full focus:ring-2 focus:ring-sky-500 outline-none text-slate-900 dark:text-slate-100 transition-colors"
                             >
                                 <option value="top-right">Top Right</option>
                                 <option value="top-left">Top Left</option>
@@ -158,7 +159,7 @@ const ToastDemo: React.FC = () => {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1">Duration: {duration}ms</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Duration: {duration}ms</label>
                             <input 
                                 type="range" 
                                 min="1000" 
@@ -166,7 +167,7 @@ const ToastDemo: React.FC = () => {
                                 step="500"
                                 value={duration} 
                                 onChange={(e) => setDuration(Number(e.target.value))}
-                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
                             />
                         </div>
                     </div>

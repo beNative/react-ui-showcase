@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 
 const Skeleton: React.FC<{ className?: string; variant?: 'text' | 'circular' | 'rectangular' }> = ({ className, variant = 'text' }) => {
-    const baseStyles = "animate-pulse bg-slate-700/50";
+    const baseStyles = "animate-pulse bg-slate-200 dark:bg-slate-700/50";
     const variantStyles = {
         text: "rounded",
         circular: "rounded-full",
@@ -14,7 +15,7 @@ const Skeleton: React.FC<{ className?: string; variant?: 'text' | 'circular' | '
 };
 
 const CardSkeleton = ({ showImage, lines }: { showImage: boolean, lines: number }) => (
-    <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 w-full max-w-sm">
+    <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700 w-full max-w-sm transition-colors shadow-sm">
         <div className="flex items-center space-x-4 mb-4">
             {showImage && <Skeleton variant="circular" className="w-12 h-12" />}
             <div className="space-y-2 flex-1">
@@ -46,8 +47,8 @@ const SkeletonDemo: React.FC = () => {
                     </div>
                     
                     {/* Configuration Panel */}
-                    <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4 w-full">
-                        <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                    <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4 w-full transition-colors">
+                        <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
                         
                         <div>
                             <label className="flex items-center space-x-2 cursor-pointer">
@@ -55,21 +56,21 @@ const SkeletonDemo: React.FC = () => {
                                     type="checkbox" 
                                     checked={showImage} 
                                     onChange={(e) => setShowImage(e.target.checked)}
-                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
                                 />
-                                <span className="text-sm text-slate-300">Show Avatar</span>
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Show Avatar</span>
                             </label>
                         </div>
                         
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1">Number of Lines: {lines}</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Number of Lines: {lines}</label>
                             <input 
                                 type="range" 
                                 min="1" 
                                 max="6" 
                                 value={lines} 
                                 onChange={(e) => setLines(Number(e.target.value))}
-                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
                             />
                         </div>
                     </div>

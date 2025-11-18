@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 import { CommandIcon, HomeIcon, UserCircleIcon,  AdjustmentsHorizontalIcon } from './Icons';
@@ -43,12 +44,12 @@ const CommandPaletteDemo: React.FC = () => {
         <div>
             <LivePreview>
                 <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                    <p className="text-slate-400 text-sm">
-                        Press <kbd className="px-2 py-1 bg-slate-800 rounded border border-slate-700 font-sans text-xs text-slate-300">⌘ K</kbd> or <kbd className="px-2 py-1 bg-slate-800 rounded border border-slate-700 font-sans text-xs text-slate-300">Ctrl K</kbd> to open
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">
+                        Press <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded border border-slate-300 dark:border-slate-700 font-sans text-xs text-slate-600 dark:text-slate-300">⌘ K</kbd> or <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded border border-slate-300 dark:border-slate-700 font-sans text-xs text-slate-600 dark:text-slate-300">Ctrl K</kbd> to open
                     </p>
                     <button 
                         onClick={() => setIsOpen(true)}
-                        className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-md text-slate-300 hover:bg-slate-700 transition-colors text-sm"
+                        className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-sm shadow-sm"
                     >
                         Open Command Palette
                     </button>
@@ -57,19 +58,19 @@ const CommandPaletteDemo: React.FC = () => {
                 {/* Palette Modal */}
                 {isOpen && (
                     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh] px-4">
-                        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsOpen(false)}></div>
-                        <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-xl shadow-2xl overflow-hidden animate-fade-in-up">
-                            <div className="flex items-center px-4 border-b border-slate-800">
-                                <CommandIcon className="w-5 h-5 text-slate-500 mr-3" />
+                        <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm" onClick={() => setIsOpen(false)}></div>
+                        <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl overflow-hidden animate-fade-in-up transition-colors">
+                            <div className="flex items-center px-4 border-b border-slate-200 dark:border-slate-800">
+                                <CommandIcon className="w-5 h-5 text-slate-400 dark:text-slate-500 mr-3" />
                                 <input
                                     ref={inputRef}
                                     type="text"
                                     placeholder="Type a command or search..."
                                     value={query}
                                     onChange={e => setQuery(e.target.value)}
-                                    className="w-full h-14 bg-transparent border-none focus:ring-0 text-slate-200 placeholder-slate-500 outline-none"
+                                    className="w-full h-14 bg-transparent border-none focus:ring-0 text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 outline-none"
                                 />
-                                <button onClick={() => setIsOpen(false)} className="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded border border-slate-700">ESC</button>
+                                <button onClick={() => setIsOpen(false)} className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-1 rounded border border-slate-200 dark:border-slate-700">ESC</button>
                             </div>
                             <div className="max-h-64 overflow-y-auto p-2">
                                 {filteredItems.length > 0 ? (
@@ -78,13 +79,13 @@ const CommandPaletteDemo: React.FC = () => {
                                         {filteredItems.map(item => (
                                             <button
                                                 key={item.id}
-                                                className="w-full flex items-center px-3 py-2.5 rounded-md text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors group text-left"
+                                                className="w-full flex items-center px-3 py-2.5 rounded-md text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors group text-left"
                                                 onClick={() => {
                                                     alert(`Selected: ${item.label}`);
                                                     setIsOpen(false);
                                                 }}
                                             >
-                                                <span className="text-slate-500 group-hover:text-sky-400 transition-colors">{item.icon}</span>
+                                                <span className="text-slate-400 dark:text-slate-500 group-hover:text-sky-500 dark:group-hover:text-sky-400 transition-colors">{item.icon}</span>
                                                 {item.label}
                                             </button>
                                         ))}
