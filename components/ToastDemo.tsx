@@ -6,8 +6,8 @@ interface Toast {
     id: number;
     message: string;
     type: 'success' | 'error' | 'info' | 'warning';
-    // FIX: Replaced JSX.Element with React.ReactNode to resolve "Cannot find namespace 'JSX'" error.
     icon: React.ReactNode;
+    duration: number;
 }
 
 type ToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
@@ -49,12 +49,12 @@ const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: number) => void }>
     useEffect(() => {
         const timer = setTimeout(() => {
             onRemove(toast.id);
-        }, 5000);
+        }, toast.duration);
         return () => clearTimeout(timer);
-    }, [toast.id, onRemove]);
+    }, [toast.id, toast.duration, onRemove]);
 
     return (
-        <div className="bg-slate-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden w-full max-w-sm">
+        <div className="bg-slate-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden w-full max-w-sm animate-fade-in-up">
             <div className="p-4">
                 <div className="flex items-start">
                     <div className="flex-shrink-0">{toast.icon}</div>
@@ -70,6 +70,15 @@ const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: number) => void }>
                     </div>
                 </div>
             </div>
+             <style>{`
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fade-in-up {
+                    animation: fadeInUp 0.3s ease-out forwards;
+                }
+            `}</style>
         </div>
     );
 };
@@ -81,7 +90,9 @@ const ToastContainer: React.FC<{ toasts: Toast[], onRemove: (id: number) => void
     useEffect(() => {
         document.body.appendChild(el);
         return () => {
-            document.body.removeChild(el);
+            if(document.body.contains(el)) {
+                document.body.removeChild(el);
+            }
         }
     }, [el]);
 
@@ -98,6 +109,7 @@ const ToastContainer: React.FC<{ toasts: Toast[], onRemove: (id: number) => void
 const ToastDemo: React.FC = () => {
     const [toasts, setToasts] = useState<Toast[]>([]);
     const [position, setPosition] = useState<ToastPosition>('top-right');
+    const [duration, setDuration] = useState(3000);
 
     const addToast = useCallback((type: Toast['type'], message: string) => {
         const newToast: Toast = {
@@ -105,9 +117,10 @@ const ToastDemo: React.FC = () => {
             message,
             type,
             icon: TOAST_ICONS[type],
+            duration: duration
         };
         setToasts(prev => [...prev, newToast]);
-    }, []);
+    }, [duration]);
 
     const removeToast = useCallback((id: number) => {
         setToasts(prev => prev.filter(toast => toast.id !== id));
@@ -117,26 +130,45 @@ const ToastDemo: React.FC = () => {
         <div>
             <ToastContainer toasts={toasts} onRemove={removeToast} position={position} />
             <LivePreview>
-                <div className="space-y-4">
-                    <div>
-                        <label htmlFor="position-select" className="block text-sm font-medium text-slate-300 mb-2">Position</label>
-                        <select
-                            id="position-select"
-                            value={position}
-                            onChange={(e) => setPosition(e.target.value as ToastPosition)}
-                            className="bg-slate-700 border border-slate-600 rounded-md px-3 py-2 text-sm w-full focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none"
-                        >
-                            <option value="top-right">Top Right</option>
-                            <option value="top-left">Top Left</option>
-                            <option value="bottom-right">Bottom Right</option>
-                            <option value="bottom-left">Bottom Left</option>
-                        </select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-4 flex flex-col justify-center">
+                        <div className="grid grid-cols-2 gap-4">
+                            <button onClick={() => addToast('success', 'Operation completed successfully!')} className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-semibold hover:bg-green-500 transition-colors">Success</button>
+                            <button onClick={() => addToast('error', 'An error occurred!')} className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-semibold hover:bg-red-500 transition-colors">Error</button>
+                            <button onClick={() => addToast('info', 'Here is some information.')} className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-semibold hover:bg-blue-500 transition-colors">Info</button>
+                            <button onClick={() => addToast('warning', 'Please check your input.')} className="px-4 py-2 bg-yellow-600 text-white rounded-md text-sm font-semibold hover:bg-yellow-500 transition-colors">Warning</button>
+                        </div>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <button onClick={() => addToast('success', 'Operation completed successfully!')} className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-semibold hover:bg-green-500 transition-colors">Success</button>
-                        <button onClick={() => addToast('error', 'An error occurred!')} className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-semibold hover:bg-red-500 transition-colors">Error</button>
-                        <button onClick={() => addToast('info', 'Here is some information.')} className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-semibold hover:bg-blue-500 transition-colors">Info</button>
-                        <button onClick={() => addToast('warning', 'Please check your input.')} className="px-4 py-2 bg-yellow-600 text-white rounded-md text-sm font-semibold hover:bg-yellow-500 transition-colors">Warning</button>
+
+                    {/* Configuration Panel */}
+                    <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4">
+                         <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                        <div>
+                            <label htmlFor="position-select" className="block text-sm font-medium text-slate-300 mb-2">Position</label>
+                            <select
+                                id="position-select"
+                                value={position}
+                                onChange={(e) => setPosition(e.target.value as ToastPosition)}
+                                className="bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm w-full focus:ring-2 focus:ring-sky-500 outline-none"
+                            >
+                                <option value="top-right">Top Right</option>
+                                <option value="top-left">Top Left</option>
+                                <option value="bottom-right">Bottom Right</option>
+                                <option value="bottom-left">Bottom Left</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-1">Duration: {duration}ms</label>
+                            <input 
+                                type="range" 
+                                min="1000" 
+                                max="10000" 
+                                step="500"
+                                value={duration} 
+                                onChange={(e) => setDuration(Number(e.target.value))}
+                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                            />
+                        </div>
                     </div>
                 </div>
             </LivePreview>

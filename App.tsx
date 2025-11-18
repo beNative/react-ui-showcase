@@ -7,7 +7,8 @@ import {
     AdjustmentsHorizontalIcon, GeminiIcon, TableCellsIcon, ChevronUpDownIcon, CalendarDaysIcon, 
     ArrowsUpDownIcon, ChartBarIcon, ArrowsRightLeftIcon, RectangleStackIcon, ChevronDownIcon, 
     ComputerDesktopIcon, ChatBubbleLeftRightIcon, CubeTransparentIcon, UserCircleIcon,
-    TagIcon, HomeIcon, StarIcon
+    TagIcon, HomeIcon, StarIcon, KeyIcon, ProgressBarIcon, SidebarIcon, CommandIcon,
+    ArrowsPointingOutIcon, CursorClickIcon, ScrollIcon, IdentificationIcon, SparklesIcon, ClockIcon
 } from './components/Icons';
 import MonacoEditorDemo from './components/MonacoEditorDemo';
 import ToastDemo from './components/ToastDemo';
@@ -31,6 +32,16 @@ import AvatarDemo from './components/AvatarDemo';
 import BadgeDemo from './components/BadgeDemo';
 import BreadcrumbDemo from './components/BreadcrumbDemo';
 import RatingDemo from './components/RatingDemo';
+import OtpInputDemo from './components/OtpInputDemo';
+import ProgressDemo from './components/ProgressDemo';
+import SheetDemo from './components/SheetDemo';
+import CommandPaletteDemo from './components/CommandPaletteDemo';
+import ResizableDemo from './components/ResizableDemo';
+import ContextMenuDemo from './components/ContextMenuDemo';
+import ScrollAreaDemo from './components/ScrollAreaDemo';
+import HoverCardDemo from './components/HoverCardDemo';
+import ConfettiDemo from './components/ConfettiDemo';
+import TimelineDemo from './components/TimelineDemo';
 
 
 const App: React.FC = () => {
@@ -38,6 +49,7 @@ const App: React.FC = () => {
         // Inputs
         { id: 'controls', name: 'Controls', icon: <AdjustmentsHorizontalIcon className="w-5 h-5" />, component: <ControlsDemo />, category: 'Inputs' },
         { id: 'select', name: 'Select', icon: <ChevronUpDownIcon className="w-5 h-5" />, component: <SelectDemo />, category: 'Inputs' },
+        { id: 'otp', name: 'OTP Input', icon: <KeyIcon className="w-5 h-5" />, component: <OtpInputDemo />, category: 'Inputs' },
         { id: 'datepicker', name: 'Date Picker', icon: <CalendarDaysIcon className="w-5 h-5" />, component: <DatePickerDemo />, category: 'Inputs' },
         { id: 'rangeslider', name: 'Range Slider', icon: <ArrowsRightLeftIcon className="w-5 h-5" />, component: <RangeSliderDemo />, category: 'Inputs' },
         { id: 'rating', name: 'Rating', icon: <StarIcon className="w-5 h-5" />, component: <RatingDemo />, category: 'Inputs' },
@@ -48,19 +60,28 @@ const App: React.FC = () => {
         { id: 'charts', name: 'Charts', icon: <ChartBarIcon className="w-5 h-5" />, component: <ChartsDemo />, category: 'Data Display' },
         { id: 'avatar', name: 'Avatar Group', icon: <UserCircleIcon className="w-5 h-5" />, component: <AvatarDemo />, category: 'Data Display' },
         { id: 'badge', name: 'Badge', icon: <TagIcon className="w-5 h-5" />, component: <BadgeDemo />, category: 'Data Display' },
+        { id: 'hovercard', name: 'Hover Card', icon: <IdentificationIcon className="w-5 h-5" />, component: <HoverCardDemo />, category: 'Data Display' },
+        { id: 'timeline', name: 'Timeline', icon: <ClockIcon className="w-5 h-5" />, component: <TimelineDemo />, category: 'Data Display' },
 
         // Feedback
         { id: 'toast', name: 'Toast', icon: <BellIcon className="w-5 h-5" />, component: <ToastDemo />, category: 'Feedback' },
+        { id: 'progress', name: 'Progress', icon: <ProgressBarIcon className="w-5 h-5" />, component: <ProgressDemo />, category: 'Feedback' },
         { id: 'dialog', name: 'Dialog', icon: <ComputerDesktopIcon className="w-5 h-5" />, component: <DialogDemo />, category: 'Feedback' },
         { id: 'tooltip', name: 'Tooltip', icon: <ChatBubbleLeftRightIcon className="w-5 h-5" />, component: <TooltipDemo />, category: 'Feedback' },
         { id: 'skeleton', name: 'Skeleton', icon: <CubeTransparentIcon className="w-5 h-5" />, component: <SkeletonDemo />, category: 'Feedback' },
+        { id: 'confetti', name: 'Confetti', icon: <SparklesIcon className="w-5 h-5" />, component: <ConfettiDemo />, category: 'Feedback' },
 
         // Navigation
         { id: 'tabs', name: 'Tabs', icon: <RectangleStackIcon className="w-5 h-5" />, component: <TabsDemo />, category: 'Navigation' },
         { id: 'breadcrumb', name: 'Breadcrumb', icon: <HomeIcon className="w-5 h-5" />, component: <BreadcrumbDemo />, category: 'Navigation' },
+        { id: 'command', name: 'Command Palette', icon: <CommandIcon className="w-5 h-5" />, component: <CommandPaletteDemo />, category: 'Navigation' },
+        { id: 'contextmenu', name: 'Context Menu', icon: <CursorClickIcon className="w-5 h-5" />, component: <ContextMenuDemo />, category: 'Navigation' },
 
         // Layout
+        { id: 'sheet', name: 'Sheet / Drawer', icon: <SidebarIcon className="w-5 h-5" />, component: <SheetDemo />, category: 'Layout' },
         { id: 'accordion', name: 'Accordion', icon: <ChevronDownIcon className="w-5 h-5 transform rotate-90" />, component: <AccordionDemo />, category: 'Layout' },
+        { id: 'resizable', name: 'Resizable Panels', icon: <ArrowsPointingOutIcon className="w-5 h-5" />, component: <ResizableDemo />, category: 'Layout' },
+        { id: 'scrollarea', name: 'Scroll Area', icon: <ScrollIcon className="w-5 h-5" />, component: <ScrollAreaDemo />, category: 'Layout' },
         { id: 'dnd', name: 'Drag and Drop', icon: <ArrowsUpDownIcon className="w-5 h-5" />, component: <DragAndDropDemo />, category: 'Layout' },
 
         // Editors

@@ -9,35 +9,73 @@ const tabsData = [
 
 const TabsDemo: React.FC = () => {
     const [activeTab, setActiveTab] = useState(tabsData[0].id);
+    const [variant, setVariant] = useState<'underline' | 'pills'>('underline');
 
     return (
         <div>
             <LivePreview>
-                <div className="w-full">
-                    <div className="border-b border-slate-700">
-                        <nav className="-mb-px flex space-x-6" aria-label="Tabs">
+                <div className="grid grid-cols-1 gap-8">
+                    <div className="w-full">
+                        <div className={`${variant === 'underline' ? 'border-b border-slate-700' : ''}`}>
+                            <nav className={`flex ${variant === 'pills' ? 'space-x-2 bg-slate-800 p-1 rounded-lg inline-flex' : 'space-x-6'}`} aria-label="Tabs">
+                                {tabsData.map(tab => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id)}
+                                        className={`${
+                                            variant === 'underline'
+                                                ? (activeTab === tab.id
+                                                    ? 'border-sky-500 text-sky-400'
+                                                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-500') + ' whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors focus:outline-none'
+                                                : (activeTab === tab.id
+                                                    ? 'bg-slate-600 text-white shadow'
+                                                    : 'text-slate-400 hover:text-slate-200') + ' px-4 py-2 rounded-md text-sm font-medium transition-all duration-200'
+                                        }`}
+                                        aria-current={activeTab === tab.id ? 'page' : undefined}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </nav>
+                        </div>
+                        <div className="mt-5 p-4 bg-slate-800/30 rounded-lg border border-slate-800 min-h-[120px]">
                             {tabsData.map(tab => (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => setActiveTab(tab.id)}
-                                    className={`${
-                                        activeTab === tab.id
-                                            ? 'border-sky-500 text-sky-400'
-                                            : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-500'
-                                    } whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500 rounded-t-sm`}
-                                    aria-current={activeTab === tab.id ? 'page' : undefined}
-                                >
-                                    {tab.label}
-                                </button>
+                                <div key={tab.id} className={`${activeTab === tab.id ? 'block animate-fade-in' : 'hidden'}`}>
+                                    <h3 className="text-lg font-medium text-slate-200 mb-2">{tab.label}</h3>
+                                    <p className="text-slate-400">{tab.content}</p>
+                                </div>
                             ))}
-                        </nav>
+                        </div>
                     </div>
-                    <div className="mt-5">
-                        {tabsData.map(tab => (
-                            <div key={tab.id} className={`${activeTab === tab.id ? 'block' : 'hidden'}`}>
-                                <p className="text-slate-300">{tab.content}</p>
+
+                    {/* Configuration */}
+                     <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4">
+                        <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">Style Variant</label>
+                            <div className="flex space-x-4">
+                                <label className="flex items-center space-x-2 cursor-pointer">
+                                    <input 
+                                        type="radio" 
+                                        name="variant"
+                                        checked={variant === 'underline'} 
+                                        onChange={() => setVariant('underline')}
+                                        className="h-4 w-4 text-sky-600 border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                    />
+                                    <span className="text-sm text-slate-300">Underline</span>
+                                </label>
+                                <label className="flex items-center space-x-2 cursor-pointer">
+                                    <input 
+                                        type="radio" 
+                                        name="variant"
+                                        checked={variant === 'pills'} 
+                                        onChange={() => setVariant('pills')}
+                                        className="h-4 w-4 text-sky-600 border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                    />
+                                    <span className="text-sm text-slate-300">Pills / Segmented</span>
+                                </label>
                             </div>
-                        ))}
+                        </div>
                     </div>
                 </div>
             </LivePreview>
@@ -55,6 +93,15 @@ const TabsDemo: React.FC = () => {
                 installation="npm install @headlessui/react"
                 usage={`import { Tab } from '@headlessui/react';\n\n<Tab.Group>\n  <Tab.List>...</Tab.List>\n  <Tab.Panels>...</Tab.Panels>\n</Tab.Group>`}
             />
+            <style>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .animate-fade-in {
+                    animation: fadeIn 0.2s ease-out forwards;
+                }
+            `}</style>
         </div>
     );
 };

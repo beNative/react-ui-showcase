@@ -1,37 +1,78 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
 
-const Skeleton: React.FC<{ className?: string }> = ({ className }) => (
-    <div className={`animate-pulse bg-slate-700/50 rounded ${className}`}></div>
-);
+const Skeleton: React.FC<{ className?: string; variant?: 'text' | 'circular' | 'rectangular' }> = ({ className, variant = 'text' }) => {
+    const baseStyles = "animate-pulse bg-slate-700/50";
+    const variantStyles = {
+        text: "rounded",
+        circular: "rounded-full",
+        rectangular: "rounded-md"
+    };
+    return (
+        <div className={`${baseStyles} ${variantStyles[variant]} ${className}`}></div>
+    );
+};
 
-const CardSkeleton = () => (
+const CardSkeleton = ({ showImage, lines }: { showImage: boolean, lines: number }) => (
     <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 w-full max-w-sm">
         <div className="flex items-center space-x-4 mb-4">
-            <Skeleton className="w-12 h-12 rounded-full" />
+            {showImage && <Skeleton variant="circular" className="w-12 h-12" />}
             <div className="space-y-2 flex-1">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-3 w-1/2" />
+                <Skeleton variant="text" className="h-4 w-3/4" />
+                <Skeleton variant="text" className="h-3 w-1/2" />
             </div>
         </div>
         <div className="space-y-3">
-            <Skeleton className="h-20 w-full rounded-md" />
+            <Skeleton variant="rectangular" className="h-20 w-full" />
             <div className="space-y-2">
-                <Skeleton className="h-3 w-full" />
-                <Skeleton className="h-3 w-5/6" />
-                <Skeleton className="h-3 w-4/6" />
+                {Array.from({ length: lines }).map((_, i) => (
+                    <Skeleton key={i} variant="text" className={`h-3 ${i === lines - 1 ? 'w-4/6' : 'w-full'}`} />
+                ))}
             </div>
         </div>
     </div>
 );
 
 const SkeletonDemo: React.FC = () => {
+    const [showImage, setShowImage] = useState(true);
+    const [lines, setLines] = useState(3);
+
     return (
         <div>
             <LivePreview>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-items-center">
-                    <CardSkeleton />
-                    <CardSkeleton />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    <div className="flex justify-center w-full">
+                        <CardSkeleton showImage={showImage} lines={lines} />
+                    </div>
+                    
+                    {/* Configuration Panel */}
+                    <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-4 w-full">
+                        <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Configuration</h3>
+                        
+                        <div>
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    checked={showImage} 
+                                    onChange={(e) => setShowImage(e.target.checked)}
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-700 bg-slate-800 focus:ring-sky-500"
+                                />
+                                <span className="text-sm text-slate-300">Show Avatar</span>
+                            </label>
+                        </div>
+                        
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-1">Number of Lines: {lines}</label>
+                            <input 
+                                type="range" 
+                                min="1" 
+                                max="6" 
+                                value={lines} 
+                                onChange={(e) => setLines(Number(e.target.value))}
+                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                            />
+                        </div>
+                    </div>
                 </div>
             </LivePreview>
             <TechnicalOverview
@@ -41,7 +82,7 @@ const SkeletonDemo: React.FC = () => {
                 description="Skeleton screens provide a visual placeholder for content while it is loading. They improve perceived performance by giving users an immediate structure of the incoming data, reducing cognitive load compared to generic spinners."
                 features={[
                     "Animates smoothly to indicate loading activity.",
-                    "Customizable shapes, sizes, and colors.",
+                    "Customizable shapes (circle, rectangle, text).",
                     "Matches the layout of the actual content.",
                     "Accessible with ARIA attributes for screen readers."
                 ]}
