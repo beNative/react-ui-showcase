@@ -6,4 +6,5 @@ export interface Showcase {
     name: string;
     icon: React.ReactNode;
     component: React.ReactNode;
+    category: 'Inputs' | 'Data Display' | 'Feedback' | 'Navigation' | 'Layout' | 'Editors' | 'Media';
 }

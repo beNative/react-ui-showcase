@@ -24,6 +24,7 @@ const ControlsDemo: React.FC = () => {
     const [toggle1, setToggle1] = useState(false);
     const [toggle2, setToggle2] = useState(true);
     const [radioValue, setRadioValue] = useState('option2');
+    const [color, setColor] = useState('#0ea5e9');
 
     return (
         <div>
@@ -78,6 +79,25 @@ const ControlsDemo: React.FC = () => {
                                     <span className="text-slate-400 capitalize">{option}</span>
                                 </label>
                             ))}
+                        </div>
+                    </div>
+
+                    {/* Color Picker */}
+                    <div>
+                        <label htmlFor="color-picker" className="block text-sm font-medium text-slate-300">Color Picker</label>
+                        <div className="flex items-center space-x-4 mt-2">
+                           <input
+                                id="color-picker"
+                                type="color"
+                                value={color}
+                                onChange={(e) => setColor(e.target.value)}
+                                className="p-1 h-10 w-14 block bg-slate-700 border border-slate-600 cursor-pointer rounded-lg"
+                            />
+                            <div
+                                className="w-10 h-10 rounded-md border-2 border-slate-500"
+                                style={{ backgroundColor: color }}
+                            ></div>
+                            <span className="font-mono text-sm text-slate-400">{color}</span>
                         </div>
                     </div>
                 </div>
