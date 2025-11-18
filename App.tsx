@@ -11,7 +11,8 @@ import {
     ArrowsPointingOutIcon, CursorClickIcon, ScrollIcon, IdentificationIcon, SparklesIcon, ClockIcon,
     ViewColumnsIcon, CreditCardIcon, QueueListIcon, PencilSquareIcon, CloudArrowUpIcon,
     EllipsisHorizontalCircleIcon, Bars3BottomLeftIcon, ChatBubbleOvalLeftIcon, CompareIcon, RocketLaunchIcon,
-    AtSymbolIcon, CommandLineIcon, ArrowPathRoundedSquareIcon, PresentationChartLineIcon
+    AtSymbolIcon, CommandLineIcon, ArrowPathRoundedSquareIcon, PresentationChartLineIcon,
+    RectangleGroupIcon, CodeBracketIcon, CalculatorIcon, QrCodeIcon, HandRaisedIcon, FingerPrintIcon, FaceSmileIcon
 } from './components/Icons';
 import MonacoEditorDemo from './components/MonacoEditorDemo';
 import ToastDemo from './components/ToastDemo';
@@ -65,6 +66,16 @@ import FlipCardDemo from './components/FlipCardDemo';
 import TypewriterDemo from './components/TypewriterDemo';
 import DockDemo from './components/DockDemo';
 import SparklineDemo from './components/SparklineDemo';
+import MasonryDemo from './components/MasonryDemo';
+import SyntaxHighlighterDemo from './components/SyntaxHighlighterDemo';
+import JsonViewerDemo from './components/JsonViewerDemo';
+import CountUpDemo from './components/CountUpDemo';
+import QRCodeDemo from './components/QRCodeDemo';
+import SwipeableListDemo from './components/SwipeableListDemo';
+import CreditCardDemo from './components/CreditCardDemo';
+import RippleDemo from './components/RippleDemo';
+import ScrollProgressDemo from './components/ScrollProgressDemo';
+import EmojiPickerDemo from './components/EmojiPickerDemo';
 
 
 const App: React.FC = () => {
@@ -94,6 +105,7 @@ const App: React.FC = () => {
         { id: 'select', name: 'Select', icon: <ChevronUpDownIcon className="w-5 h-5" />, component: <SelectDemo />, category: 'Inputs' },
         { id: 'otp', name: 'OTP Input', icon: <KeyIcon className="w-5 h-5" />, component: <OtpInputDemo />, category: 'Inputs' },
         { id: 'inputmask', name: 'Input Mask', icon: <CreditCardIcon className="w-5 h-5" />, component: <InputMaskDemo />, category: 'Inputs' },
+        { id: 'creditcard', name: 'Credit Card', icon: <CreditCardIcon className="w-5 h-5" />, component: <CreditCardDemo />, category: 'Inputs' },
         { id: 'datepicker', name: 'Date Picker', icon: <CalendarDaysIcon className="w-5 h-5" />, component: <DatePickerDemo />, category: 'Inputs' },
         { id: 'rangeslider', name: 'Range Slider', icon: <ArrowsRightLeftIcon className="w-5 h-5" />, component: <RangeSliderDemo />, category: 'Inputs' },
         { id: 'rating', name: 'Rating', icon: <StarIcon className="w-5 h-5" />, component: <RatingDemo />, category: 'Inputs' },
@@ -102,10 +114,12 @@ const App: React.FC = () => {
         { id: 'signature', name: 'Signature Pad', icon: <PencilSquareIcon className="w-5 h-5" />, component: <SignaturePadDemo />, category: 'Inputs' },
         { id: 'dropzone', name: 'File Dropzone', icon: <CloudArrowUpIcon className="w-5 h-5" />, component: <DropzoneDemo />, category: 'Inputs' },
         { id: 'transfer', name: 'Transfer', icon: <ArrowsRightLeftIcon className="w-5 h-5" />, component: <TransferDemo />, category: 'Inputs' },
+        { id: 'emoji', name: 'Emoji Picker', icon: <FaceSmileIcon className="w-5 h-5" />, component: <EmojiPickerDemo />, category: 'Inputs' },
 
         // Data Display
         { id: 'datagrid', name: 'Data Grid', icon: <TableCellsIcon className="w-5 h-5" />, component: <DataGridDemo />, category: 'Data Display' },
         { id: 'virtuallist', name: 'Virtual List', icon: <QueueListIcon className="w-5 h-5" />, component: <VirtualListDemo />, category: 'Data Display' },
+        { id: 'masonry', name: 'Masonry Grid', icon: <RectangleGroupIcon className="w-5 h-5" />, component: <MasonryDemo />, category: 'Data Display' },
         { id: 'calendar', name: 'Calendar', icon: <CalendarDaysIcon className="w-5 h-5" />, component: <CalendarDemo />, category: 'Data Display' },
         { id: 'kanban', name: 'Kanban', icon: <ViewColumnsIcon className="w-5 h-5" />, component: <KanbanDemo />, category: 'Data Display' },
         { id: 'tree', name: 'Tree View', icon: <ListTreeIcon className="w-5 h-5" />, component: <TreeViewDemo />, category: 'Data Display' },
@@ -117,15 +131,21 @@ const App: React.FC = () => {
         { id: 'hovercard', name: 'Hover Card', icon: <IdentificationIcon className="w-5 h-5" />, component: <HoverCardDemo />, category: 'Data Display' },
         { id: 'flipcard', name: 'Flip Card', icon: <ArrowPathRoundedSquareIcon className="w-5 h-5" />, component: <FlipCardDemo />, category: 'Data Display' },
         { id: 'typewriter', name: 'Typewriter', icon: <CursorClickIcon className="w-5 h-5" />, component: <TypewriterDemo />, category: 'Data Display' },
+        { id: 'syntax', name: 'Syntax Highlight', icon: <CodeBracketIcon className="w-5 h-5" />, component: <SyntaxHighlighterDemo />, category: 'Data Display' },
+        { id: 'json', name: 'JSON Viewer', icon: <CodeIcon className="w-5 h-5" />, component: <JsonViewerDemo />, category: 'Data Display' },
+        { id: 'countup', name: 'CountUp', icon: <CalculatorIcon className="w-5 h-5" />, component: <CountUpDemo />, category: 'Data Display' },
+        { id: 'qrcode', name: 'QR Code', icon: <QrCodeIcon className="w-5 h-5" />, component: <QRCodeDemo />, category: 'Data Display' },
 
         // Feedback
         { id: 'toast', name: 'Toast', icon: <BellIcon className="w-5 h-5" />, component: <ToastDemo />, category: 'Feedback' },
         { id: 'progress', name: 'Progress', icon: <ProgressBarIcon className="w-5 h-5" />, component: <ProgressDemo />, category: 'Feedback' },
+        { id: 'scrollprogress', name: 'Scroll Progress', icon: <ProgressBarIcon className="w-5 h-5 transform rotate-90" />, component: <ScrollProgressDemo />, category: 'Feedback' },
         { id: 'dialog', name: 'Dialog', icon: <ComputerDesktopIcon className="w-5 h-5" />, component: <DialogDemo />, category: 'Feedback' },
         { id: 'popover', name: 'Popover', icon: <ChatBubbleOvalLeftIcon className="w-5 h-5" />, component: <PopoverDemo />, category: 'Feedback' },
         { id: 'tooltip', name: 'Tooltip', icon: <ChatBubbleLeftRightIcon className="w-5 h-5" />, component: <TooltipDemo />, category: 'Feedback' },
         { id: 'skeleton', name: 'Skeleton', icon: <CubeTransparentIcon className="w-5 h-5" />, component: <SkeletonDemo />, category: 'Feedback' },
         { id: 'confetti', name: 'Confetti', icon: <SparklesIcon className="w-5 h-5" />, component: <ConfettiDemo />, category: 'Feedback' },
+        { id: 'ripple', name: 'Ripple', icon: <FingerPrintIcon className="w-5 h-5" />, component: <RippleDemo />, category: 'Feedback' },
 
         // Navigation
         { id: 'tabs', name: 'Tabs', icon: <RectangleStackIcon className="w-5 h-5" />, component: <TabsDemo />, category: 'Navigation' },
@@ -143,6 +163,7 @@ const App: React.FC = () => {
         { id: 'resizable', name: 'Resizable Panels', icon: <ArrowsPointingOutIcon className="w-5 h-5" />, component: <ResizableDemo />, category: 'Layout' },
         { id: 'scrollarea', name: 'Scroll Area', icon: <ScrollIcon className="w-5 h-5" />, component: <ScrollAreaDemo />, category: 'Layout' },
         { id: 'dnd', name: 'Drag and Drop', icon: <ArrowsUpDownIcon className="w-5 h-5" />, component: <DragAndDropDemo />, category: 'Layout' },
+        { id: 'swipeable', name: 'Swipeable List', icon: <HandRaisedIcon className="w-5 h-5" />, component: <SwipeableListDemo />, category: 'Layout' },
 
         // Editors
         { id: 'monaco', name: 'Code Editor', icon: <CodeIcon className="w-5 h-5" />, component: <MonacoEditorDemo />, category: 'Editors' },
