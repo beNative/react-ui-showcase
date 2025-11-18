@@ -442,3 +442,35 @@ export const DocumentIcon: React.FC<IconProps> = (props) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
     </svg>
 );
+
+export const BoldIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3.75h4.758c1.255 0 2.414.332 3.407.931 1.053.635 1.879 1.56 2.37 2.682.49 1.12.604 2.367.318 3.573-.347 1.465-1.223 2.735-2.409 3.624 1.496.835 2.623 2.318 3.006 4.067.383 1.748.06 3.578-.888 5.075a7.484 7.484 0 0 1-3.285 2.894c-1.216.532-2.541.804-3.872.804H6.75a.75.75 0 0 1 0-1.5h8.492a5.992 5.992 0 0 0 3.098-.643 5.984 5.984 0 0 0 2.628-2.316c.758-1.198 1.017-2.661.71-4.06-.306-1.398-1.208-2.585-2.405-3.253a.75.75 0 0 1-.338-.948.75.75 0 0 1 .948-.338 7.485 7.485 0 0 1 3.006 1.624 7.485 7.485 0 0 1 1.624 3.006.75.75 0 0 1-.338.948.75.75 0 0 1-.948-.338c-.668-1.197-1.855-2.099-3.253-2.405-1.398-.307-2.862-.048-4.06.71a5.984 5.984 0 0 0-2.316 2.628 5.992 5.992 0 0 0-.643 3.098H6.75a.75.75 0 0 1 0-1.5zm0-1.5h8.492a5.992 5.992 0 0 0 3.098-.643 5.984 5.984 0 0 0 2.628-2.316c.758-1.198 1.017-2.661.71-4.06-.306-1.398-1.208-2.585-2.405-3.253a.75.75 0 0 1-.338-.948.75.75 0 0 1 .948-.338 7.485 7.485 0 0 1 3.006 1.624 7.485 7.485 0 0 1 1.624 3.006.75.75 0 0 1-.338.948.75.75 0 0 1-.948-.338c-.668-1.197-1.855-2.099-3.253-2.405-1.398-.307-2.862-.048-4.06.71a5.984 5.984 0 0 0-2.316 2.628 5.992 5.992 0 0 0-.643 3.098H6.75a.75.75 0 0 1 0-1.5z" />
+         <path strokeLinecap="round" strokeLinejoin="round" d="M6 4.5h9a3.75 3.75 0 0 1 0 7.5H6v-7.5Z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 12h10.5a3.75 3.75 0 0 1 0 7.5H6V12Z" />
+    </svg>
+);
+
+export const ItalicIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 19.5h5.25m9-15H14.25m-2.25 15L12 4.5" />
+    </svg>
+);
+
+export const AlignLeftIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h10.5m-10.5 5.25h16.5" />
+    </svg>
+);
+
+export const AlignCenterIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M6.75 12h10.5m-10.5 5.25h16.5" />
+    </svg>
+);
+
+export const AlignRightIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M9.75 12h10.5m-16.5 5.25h16.5" />
+    </svg>
+);
