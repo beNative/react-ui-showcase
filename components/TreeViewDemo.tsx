@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { LivePreview, TechnicalOverview } from './ShowcaseContainer';
-import { ChevronRightIcon, ChevronDownIcon } from './Icons';
+import { ChevronRightIcon, ChevronDownIcon, FolderIcon, DocumentTextIcon } from './Icons';
 
 interface TreeNodeData {
     id: string;
@@ -33,28 +34,43 @@ const treeData: TreeNodeData = {
     ],
 };
 
-const TreeNode: React.FC<{ node: TreeNodeData; level: number }> = ({ node, level }) => {
+const TreeNode: React.FC<{ node: TreeNodeData; level: number; showIcons: boolean; showLines: boolean }> = ({ node, level, showIcons, showLines }) => {
     const [isOpen, setIsOpen] = useState(true);
     const hasChildren = node.children && node.children.length > 0;
 
     return (
-        <div>
+        <div className="relative">
             <div
-                className={`flex items-center p-1 rounded-md cursor-pointer hover:bg-slate-700/50 ${hasChildren ? '' : 'cursor-default'}`}
+                className={`flex items-center p-1 rounded-md cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors ${hasChildren ? '' : 'cursor-default'}`}
                 style={{ paddingLeft: `${level * 20 + 4}px` }}
                 onClick={() => hasChildren && setIsOpen(!isOpen)}
             >
-                {hasChildren ? (
-                    isOpen ? <ChevronDownIcon className="w-4 h-4 mr-1 flex-shrink-0" /> : <ChevronRightIcon className="w-4 h-4 mr-1 flex-shrink-0" />
-                ) : (
-                    <span className="w-4 mr-1"></span>
+                <div className="flex items-center w-5 mr-1 flex-shrink-0">
+                    {hasChildren ? (
+                         <div className={`transform transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}>
+                            <ChevronRightIcon className="w-4 h-4 text-slate-500" />
+                         </div>
+                    ) : <span className="w-4"></span>}
+                </div>
+                
+                {showIcons && (
+                    <div className="mr-2 text-sky-500 dark:text-sky-400">
+                        {hasChildren ? <FolderIcon className="w-4 h-4" /> : <DocumentTextIcon className="w-4 h-4" />}
+                    </div>
                 )}
-                <span className="text-slate-300">{node.name}</span>
+                
+                <span className="text-slate-700 dark:text-slate-300 text-sm select-none">{node.name}</span>
             </div>
             {hasChildren && isOpen && (
-                <div>
+                <div className="relative">
+                    {showLines && (
+                         <div 
+                            className="absolute left-0 top-0 bottom-0 w-px bg-slate-200 dark:bg-slate-700"
+                            style={{ left: `${level * 20 + 12}px` }}
+                         ></div>
+                    )}
                     {node.children!.map((child) => (
-                        <TreeNode key={child.id} node={child} level={level + 1} />
+                        <TreeNode key={child.id} node={child} level={level + 1} showIcons={showIcons} showLines={showLines} />
                     ))}
                 </div>
             )}
@@ -63,11 +79,42 @@ const TreeNode: React.FC<{ node: TreeNodeData; level: number }> = ({ node, level
 };
 
 const TreeViewDemo: React.FC = () => {
+    const [showIcons, setShowIcons] = useState(true);
+    const [showLines, setShowLines] = useState(true);
+
     return (
         <div>
             <LivePreview>
-                <div className="p-4 bg-slate-900/50 rounded-lg">
-                    <TreeNode node={treeData} level={0} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 min-h-[200px]">
+                        <TreeNode node={treeData} level={0} showIcons={showIcons} showLines={showLines} />
+                    </div>
+
+                    {/* Configuration */}
+                    <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4">
+                        <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
+                        
+                        <div className="space-y-3">
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    checked={showIcons} 
+                                    onChange={(e) => setShowIcons(e.target.checked)}
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
+                                />
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Show Type Icons</span>
+                            </label>
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    checked={showLines} 
+                                    onChange={(e) => setShowLines(e.target.checked)}
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
+                                />
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Show Guide Lines</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </LivePreview>
             <TechnicalOverview

@@ -5,11 +5,14 @@ import { ChevronRightIcon } from './Icons';
 
 const CalendarDemo: React.FC = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [events] = useState<{ date: string, title: string, color: string }[]>([
-        { date: '2023-10-05', title: 'Meeting', color: 'bg-blue-500' },
-        { date: '2023-10-12', title: 'Launch', color: 'bg-green-500' },
-        { date: '2023-10-15', title: 'Review', color: 'bg-purple-500' },
-    ]);
+    const [showWeekends, setShowWeekends] = useState(true);
+    
+    // Events demo data
+    const events = [
+        { date: 5, title: 'Meeting', color: 'bg-blue-500' },
+        { date: 12, title: 'Launch', color: 'bg-green-500' },
+        { date: 15, title: 'Review', color: 'bg-purple-500' },
+    ];
 
     const getDaysInMonth = (date: Date) => {
         const year = date.getFullYear();
@@ -33,24 +36,43 @@ const CalendarDemo: React.FC = () => {
         const daysInMonth = getDaysInMonth(currentDate);
         const firstDay = getFirstDayOfMonth(currentDate);
         const days = [];
+        
+        // Determine visible columns based on configuration
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const visibleDays = showWeekends ? daysOfWeek : daysOfWeek.slice(1, 6);
 
-        for (let i = 0; i < firstDay; i++) {
+        // Empty cells before first day
+        // We need to calculate offset based on visible days
+        let emptyCells = firstDay;
+        if (!showWeekends) {
+            // If no weekends, adjust offset. 
+            // Sunday(0) -> invalid/skipped, Monday(1) -> 0 offset
+            emptyCells = Math.max(0, firstDay - 1); 
+        }
+        
+        for (let i = 0; i < emptyCells; i++) {
             days.push(<div key={`empty-${i}`} className="h-24 bg-slate-50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800/50 transition-colors"></div>);
         }
 
         for (let day = 1; day <= daysInMonth; day++) {
-            // Simple mock check for events - in a real app, compare full dates
-            // This demo just randomly assigns events for visual purposes as date logic is complex
-            const hasEvent = Math.random() > 0.85; 
+            const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+            const dayOfWeek = date.getDay();
+
+            // Skip weekends if hidden (0=Sun, 6=Sat)
+            if (!showWeekends && (dayOfWeek === 0 || dayOfWeek === 6)) {
+                continue;
+            }
+
+            const event = events.find(e => e.date === day);
             
             days.push(
                 <div key={day} className="h-24 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer relative group">
                     <span className={`text-sm font-medium ${day === new Date().getDate() ? 'bg-sky-600 text-white w-6 h-6 rounded-full flex items-center justify-center' : 'text-slate-700 dark:text-slate-400'}`}>
                         {day}
                     </span>
-                    {hasEvent && (
+                    {event && (
                         <div className="mt-2 p-1 text-xs rounded bg-sky-100 dark:bg-sky-900/50 border border-sky-200 dark:border-sky-700/50 text-sky-700 dark:text-sky-200 truncate">
-                            Team Sync
+                            {event.title}
                         </div>
                     )}
                 </div>
@@ -58,12 +80,15 @@ const CalendarDemo: React.FC = () => {
         }
         return days;
     };
+    
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const visibleHeaders = showWeekends ? daysOfWeek : daysOfWeek.slice(1, 6);
 
     return (
         <div>
             <LivePreview>
-                <div className="w-full max-w-4xl mx-auto">
-                    <div className="flex items-center justify-between mb-4">
+                <div className="w-full max-w-4xl mx-auto space-y-6">
+                    <div className="flex items-center justify-between">
                         <h2 className="text-xl font-bold text-slate-900 dark:text-slate-200 transition-colors">
                             {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
                         </h2>
@@ -76,13 +101,28 @@ const CalendarDemo: React.FC = () => {
                             </button>
                         </div>
                     </div>
-                    <div className="grid grid-cols-7 gap-px bg-slate-200 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm">
-                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                    
+                    <div className={`grid gap-px bg-slate-200 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm ${showWeekends ? 'grid-cols-7' : 'grid-cols-5'}`}>
+                        {visibleHeaders.map(day => (
                             <div key={day} className="bg-slate-50 dark:bg-slate-950 py-2 text-center text-sm font-semibold text-slate-600 dark:text-slate-500 transition-colors">
                                 {day}
                             </div>
                         ))}
                         {renderCalendar()}
+                    </div>
+
+                    {/* Configuration */}
+                    <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 transition-colors">
+                        <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Configuration</h3>
+                        <label className="flex items-center space-x-2 cursor-pointer">
+                            <input 
+                                type="checkbox" 
+                                checked={showWeekends} 
+                                onChange={(e) => setShowWeekends(e.target.checked)}
+                                className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
+                            />
+                            <span className="text-sm text-slate-700 dark:text-slate-300">Show Weekends</span>
+                        </label>
                     </div>
                 </div>
             </LivePreview>

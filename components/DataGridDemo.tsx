@@ -24,6 +24,10 @@ const DataGridDemo: React.FC = () => {
     const [sortKey, setSortKey] = useState<SortKey>('id');
     const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
     const [currentPage, setCurrentPage] = useState(1);
+    const [isStriped, setIsStriped] = useState(false);
+    const [isCompact, setIsCompact] = useState(false);
+    const [isBordered, setIsBordered] = useState(true);
+
     const itemsPerPage = 5;
 
     const sortedData = useMemo(() => {
@@ -61,40 +65,82 @@ const DataGridDemo: React.FC = () => {
     return (
         <div>
             <LivePreview>
-                <div className="overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-sm text-left text-slate-600 dark:text-slate-400">
-                            <thead className="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700">
-                                <tr>
-                                    {(Object.keys(mockData[0]) as SortKey[]).map(key => (
-                                        <th key={key} scope="col" className="px-6 py-3 cursor-pointer select-none hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" onClick={() => handleSort(key)}>
-                                            {key} <SortIcon columnKey={key} />
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {paginatedData.map(item => (
-                                    <tr key={item.id} className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                                        <td className="px-6 py-4 font-medium text-slate-900 dark:text-slate-200">{item.id}</td>
-                                        <td className="px-6 py-4 text-slate-700 dark:text-slate-300">{item.name}</td>
-                                        <td className="px-6 py-4">{item.age}</td>
-                                        <td className="px-6 py-4">{item.city}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                <div className="grid grid-cols-1 gap-8">
+                    <div>
+                        <div className={`overflow-hidden rounded-lg ${isBordered ? 'border border-slate-200 dark:border-slate-700' : ''}`}>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm text-left text-slate-600 dark:text-slate-400">
+                                    <thead className="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700">
+                                        <tr>
+                                            {(Object.keys(mockData[0]) as SortKey[]).map(key => (
+                                                <th key={key} scope="col" className={`${isCompact ? 'px-4 py-2' : 'px-6 py-3'} cursor-pointer select-none hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors`} onClick={() => handleSort(key)}>
+                                                    {key} <SortIcon columnKey={key} />
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {paginatedData.map((item, idx) => (
+                                            <tr key={item.id} className={`
+                                                border-b border-slate-200 dark:border-slate-800 last:border-0 transition-colors
+                                                ${isStriped && idx % 2 === 1 ? 'bg-slate-50 dark:bg-slate-800/30' : 'bg-white dark:bg-slate-900'}
+                                                hover:bg-slate-50 dark:hover:bg-slate-800/50
+                                            `}>
+                                                <td className={`${isCompact ? 'px-4 py-2' : 'px-6 py-4'} font-medium text-slate-900 dark:text-slate-200`}>{item.id}</td>
+                                                <td className={`${isCompact ? 'px-4 py-2' : 'px-6 py-4'} text-slate-700 dark:text-slate-300`}>{item.name}</td>
+                                                <td className={`${isCompact ? 'px-4 py-2' : 'px-6 py-4'}`}>{item.age}</td>
+                                                <td className={`${isCompact ? 'px-4 py-2' : 'px-6 py-4'}`}>{item.city}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div className="flex justify-between items-center mt-4 px-2">
+                            <span className="text-sm text-slate-600 dark:text-slate-400">Page {currentPage} of {totalPages}</span>
+                            <div className="inline-flex mt-2 xs:mt-0">
+                                <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-white bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-l hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                    Prev
+                                </button>
+                                <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-white bg-white dark:bg-slate-700 border border-l-0 border-slate-300 dark:border-slate-600 rounded-r hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                    Next
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="flex justify-between items-center mt-4 px-2">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Page {currentPage} of {totalPages}</span>
-                    <div className="inline-flex mt-2 xs:mt-0">
-                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-white bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-l hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                            Prev
-                        </button>
-                        <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-white bg-white dark:bg-slate-700 border border-l-0 border-slate-300 dark:border-slate-600 rounded-r hover:bg-slate-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                            Next
-                        </button>
+
+                    {/* Configuration */}
+                    <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4">
+                        <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Configuration</h3>
+                        <div className="flex flex-wrap gap-6">
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    checked={isStriped} 
+                                    onChange={(e) => setIsStriped(e.target.checked)}
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
+                                />
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Striped Rows</span>
+                            </label>
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    checked={isCompact} 
+                                    onChange={(e) => setIsCompact(e.target.checked)}
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
+                                />
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Compact Mode</span>
+                            </label>
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    checked={isBordered} 
+                                    onChange={(e) => setIsBordered(e.target.checked)}
+                                    className="form-checkbox h-4 w-4 text-sky-600 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-sky-500"
+                                />
+                                <span className="text-sm text-slate-700 dark:text-slate-300">Bordered</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </LivePreview>

@@ -43,7 +43,7 @@ const OtpInput: React.FC<{ length?: number; value: string; onChange: (val: strin
             {Array.from({ length }).map((_, idx) => (
                 <input
                     key={idx}
-                    ref={el => inputRefs.current[idx] = el}
+                    ref={(el) => { inputRefs.current[idx] = el; }}
                     type={isMasked ? "password" : "text"}
                     maxLength={1}
                     value={value[idx] || ''}
